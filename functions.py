@@ -43,10 +43,12 @@ def safe_mine(x,y,direc):
     sense.x = x
     sense.y = y
     sense.direction = direc
+
     #when safe mine is detected
     if safe_mine_is_detected == 1:
+        print("turn on yellow LED")
         #record the position of the safe mine
-        safe_mine_position.append({sense.x, sense.y})
+        #safe_mine_position.append({sense.x, sense.y})
         #stay for 3 seconds
         time.sleep(3)
         #tell the car to push out the mine
@@ -65,6 +67,7 @@ def dangerous_mine(x,y,direc):
     sense.direction = direc
     # when dangerous mine is detected
     if dangerous_mine_is_detected == 1:
+        print ("turn on red LED")
         #record the position of the dangerous mine
         dangerious_mine_position.append({sense.x, sense.y})
         # stay for 3 seconds
@@ -96,6 +99,14 @@ def centre_position(x,y,direc):
             if round(sense.x) == 0 and round(sense.y) == 0:
                 break
 
+def error_adjust(x,y,direc,request_direc):
+    if request_direc-direc>= 10:
+        print ("turn to one side")
+    elif request_direc-direc <= -10:
+        print ("turn to the other side")_
+
+
+
 #above is the function defining
 #the following is the main operating function
 import json
@@ -116,7 +127,7 @@ while 1: #Do this forever
     y = position["current_y"]
     direc = position["current_dir"]
     turn(x,y,direc)
-    back(x,y,direc)
+    #back(x,y,direc)
     y_pos = safe_mine(x,y,direc)
     r_pos = dangerous_mine(x,y,direc)
     centre_position(x,y,direc)
@@ -124,6 +135,12 @@ while 1: #Do this forever
         yellow.append(y_pos)
     if r_pos:
         red.append(r_pos)
+    centre_position(x,y,direc)
+
+    error_adjust(x,y,direc)
+
+
+
 
 
     time.sleep(1)
