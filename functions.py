@@ -4,6 +4,7 @@ import time #Required to use delay functions
 turning_point = {} #create a list of turning points
 set_direction = {} #create a list of designated turning directions
 
+
 def turn(x,y,direc):
     # get the live position and direction
     sense.x = x
