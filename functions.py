@@ -146,4 +146,29 @@ while 1: #Do this forever
 
     time.sleep(1)
 
+    ######read the data from arduino serial and output to json files
+
+    serial_data = [] #create an empty list for the data output
+    ArduinoSerial = serial.Serial('port的名字', 9600)  # Create Serial port object called arduinoSerialData
+    time.sleep(2)  # wait for 2 seconds for the communication to get established
+    ArduinoSerial.readline()  # read the serial data
+
+    serial_line = ArduinoSerial.readline()
+    serial_data.append(serial_line) # append the reading to the serial list
+
+
+    import json
+    with open("相对路径.json",) as f:
+        d = json.load(f)
+
+    d["x_pos"] = serial_data[x]
+    d["y_pos"] = serial_data[y]
+    d["direc"] = serial_data[pos]
+
+
+    with open("相对路径.json") as f:
+        json.dump(d)
+
+
+
 
