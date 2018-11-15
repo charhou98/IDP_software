@@ -1,17 +1,50 @@
 import serial #Serial imported for Serial communication
 import time #Required to use delay functions
+import numpy as np
 
-turning_point = {(), (), (), (), (), ()#create a list of turning points
-set_direction = {1.52, 5.96, 4.43, 3.20, ....} #create a list of designated turning directions
+
+
+x0 = 30
+y0 = 35
+dx = 20
+dy = 20
+
 
 
 def turn(x,y,direc):
+
+    x0 = 30
+    y0 = 35
+    dx = 20
+    dy = 20
+
+    turning_point = list({(x0, y0), (x0, y0), (x0, y0), (x0 + dx, y0),
+                 (x0 + dx, y0 + dy), (x0 + dx, y0 + dy), (x0 + dx, y0 + dy), (x0 + 2*dx, y0 + dy),
+                 (x0 + 2*dx, y0 + 2*dy), (x0 + 2*dx, y0 + 2*dy), (x0 + 2*dx, y0 + 2*dy), (x0 + 3*dx, y0 + 2*dy),\n
+                 (x0 + 3*dx, y0 + 3*dy), (x0 + 3*dx, y0 + 3*dy), (x0 + 3*dx, y0 + 3*dy), (x0 + 4*dx, y0 + 3*dy),\n
+                 (x0 + 4*dx, y0 + 4*dy), (x0 + 4*dx, y0 + 4*dy), (x0 + 4*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy),\n
+                 (x0 + 5*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy), (x0 + 6*dx, y0 + 5*dy),\n
+                 (x0 + 6*dx, y0 + 5*dy), (x0 + 6*dx, y0 + 5*dy), (x0 + 6*dx, y0 + 5*dy), (x0 + 7*dx, y0 + 6*dy),\n
+                 (x0 + 7*dx, y0 + 6*dy), (x0 + 7*dx, y0 + 6*dy), (x0 + 7*dx, y0 + 6*dy), (x0 + 8*dx, y0 + 7*dy),\n
+                 (x0 + 8*dx, y0 + 7*dy), (x0 + 8*dx, y0 + 7*dy), (x0 + 8*dx, y0 + 7*dy), (x0 + 9*dx, y0 + 8*dy),\n
+                 (x0 + 9*dx, y0 + 8*dy), (x0 + 9*dx, y0 + 8*dy), (x0 + 9*dx, y0 + 8*dy), (x0 + 10*dx, y0 + 9*dy)})
+    #create a list of turning points
+
+    set_direction = list({1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20,
+                 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20,
+                 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20,
+                 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20,
+                 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20,
+                 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20})
+    # create a list of designated turning directions
+
     # get the live position and direction
     sense.x = x
     sense.y = y
     sense.direction = direc
-    if round(sense.x - x.turning_point[i]) == 0 and round(sense.y - y.turning_point[i]) == 0: #when turning point is reached
+    if round(sense.x - turning_point[i][0]) == 0 and round(sense.y - turning_point[i][1]) == 0: #when turning point is reached
         i = 0 #i is counter
+
         #tell left motor to turn back
         ArduinoSerial.write('turn')
         #tell right motor to turn forward
@@ -20,22 +53,23 @@ def turn(x,y,direc):
         if round(sense.direction - set_direction[i]) == 0:  #when direction has changed
             ArduinoSerial.write('straight')               # tell motor to stop turning and go back to straight movement
 
-        i += 1    #counter plus 1, prepare for the next turning point
 
-def back(x,y,direc):
-    # get the live position and direction
-    sense.x = x
-    sense.y = y
-    sense.direction = direct
-    if sense.x == x.wall or sense.y == y.wall: #when the wall is hit, go back
-        # tell left motor to turn back
-        print("left motor back")
-        # tell right motor to turn back
-        print("right motor back")
-        #go back to the last turning point
-        if round(sense.x - x.turning_point[i]) == 0 and round(sense.y - y.turning_point[i]) == 0: #when the last turning point is reached
-            print("stop turning")  # tell motor to stop turning and go back to straight movement
+        def back(x,y,direc):
+            x_wall =
+            # identify the wall position
 
+            sense.x = x
+            sense.y = y
+            sense.direction = direc
+
+            if sense.x == x_wall: #when the wall is hit, go back
+            #tell car to go back
+            ArduinoSerial.write('back')
+            #go back to the last turning point
+            if round(sense.x - turning_point[i][0]) == 0 and round(sense.y - turning_point[i][1]) == 0: #when the last turning point is reached
+                ArduinoSerial.write('straight')  # tell motor to stop turning and go back to straight movement
+
+        i += 1  # counter plus 1, prepare for the next turning point
 
 def safe_mine(x,y,direc):
     # create the list for the positions of safe mines
@@ -77,25 +111,23 @@ def dangerous_mine(x,y,direc):
 
 
 def centre_position(x,y,direc):
-    #give a centre position
-    x.centre_point =
-    y.centre_point =
+    x_centre_point =
+    y_centre_point =
+    # give a centre position
+
     # get the live position and direction
     sense.x = x
     sense.y = y
     sense.direction = direc
 
     #when arrive at centre point, go back to original point
-    if round(sense.x - x.centre_point) == 0 and round(sense.y - y.centre_point) == 0:
+    if round(sense.x - x_centre_point) == 0 and round(sense.y - y_centre_point) == 0:
         # turn the car and let it point to the original point
-        # tell left motor to turn back
-        print("left motor back")
-        # tell right motor to turn forward
-        print("right motor forward")
+        ArduinoSerial.write('turn')
         # when home direction has reached
         if round(sense.direction - home_direction) == 0:
             # tell motor to stop turning and go back to straight movement
-            print("stop turning")
+            ArduinoSerial.write('straight')
             # when home is arrived, stop moving permanently
             if round(sense.x) == 0 and round(sense.y) == 0:
                 break
@@ -113,7 +145,7 @@ def error_adjust(x,y,direc,request_direc):
 import json
 
  
-ArduinoSerial = serial.Serial('COM4',9600) #Create Serial port object called arduinoSerialData
+ArduinoSerial = serial.Serial('/dev/cu.usbmodem14301',9600) #Create Serial port object called arduinoSerialData
 time.sleep(2) #wait for 2 secounds for the communication to get established
 print ArduinoSerial.readline() #read the serial data and print it as line
 print ("Starting program")
