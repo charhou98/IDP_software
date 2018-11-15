@@ -1,8 +1,9 @@
 import serial #Serial imported for Serial communication
 import time #Required to use delay functions
 
-turning_point = {} #create a list of turning points
-set_direction = {} #create a list of designated turning directions
+turning_point = {(), (), (), (), (), ()#create a list of turning points
+set_direction = {1.52, 5.96, 4.43, 3.20, ....} #create a list of designated turning directions
+
 
 def turn(x,y,direc):
     # get the live position and direction
@@ -12,12 +13,12 @@ def turn(x,y,direc):
     if round(sense.x - x.turning_point[i]) == 0 and round(sense.y - y.turning_point[i]) == 0: #when turning point is reached
         i = 0 #i is counter
         #tell left motor to turn back
-        print("left motor back")
+        ArduinoSerial.write('turn')
         #tell right motor to turn forward
-        print("right motor forward")
+
 
         if round(sense.direction - set_direction[i]) == 0:  #when direction has changed
-            print("stop turning")                # tell motor to stop turning and go back to straight movement
+            ArduinoSerial.write('straight')               # tell motor to stop turning and go back to straight movement
 
         i += 1    #counter plus 1, prepare for the next turning point
 
@@ -144,5 +145,8 @@ while 1: #Do this forever
 
 
     time.sleep(1)
+
+
+
 
 

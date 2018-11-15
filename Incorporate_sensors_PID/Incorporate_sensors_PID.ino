@@ -338,7 +338,14 @@ void setup()
 // All functions listed for testing - comment out as required
 void loop()
 {
- 
+ //speed = serial.read();
+ //if speed == "turn":
+    //tot_speed = 15;
+    //correction =0;
+ //elif speed == "straight":
+    //tot_speed = 15;
+    //correction = 5;
+
   mine_detection();
   for (int i = 0; i <= 7; i++) { 
     if (mine_pos[i] == 1) {
@@ -353,7 +360,7 @@ void loop()
   //Serial.println(correction);
   //motor_shield(tot_speed + correction, tot_speed - correction);
   //scoop_servo.write(servo_pos);
-  delay(100);
+  delay(200);
    
 }
                   
