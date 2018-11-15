@@ -13,12 +13,12 @@ def turn(x,y,direc):
     if round(sense.x - x.turning_point[i]) == 0 and round(sense.y - y.turning_point[i]) == 0: #when turning point is reached
         i = 0 #i is counter
         #tell left motor to turn back
-        print("left motor back")
+        ArduinoSerial.write('turn')
         #tell right motor to turn forward
-        print("right motor forward")
+
 
         if round(sense.direction - set_direction[i]) == 0:  #when direction has changed
-            print("stop turning")                # tell motor to stop turning and go back to straight movement
+            ArduinoSerial.write('straight')               # tell motor to stop turning and go back to straight movement
 
         i += 1    #counter plus 1, prepare for the next turning point
 
@@ -146,28 +146,6 @@ while 1: #Do this forever
 
     time.sleep(1)
 
-    ######read the data from arduino serial and output to json files
-
-    serial_data = [] #create an empty list for the data output
-    ArduinoSerial = serial.Serial('port的名字', 9600)  # Create Serial port object called arduinoSerialData
-    time.sleep(2)  # wait for 2 seconds for the communication to get established
-    ArduinoSerial.readline()  # read the serial data
-
-    serial_line = ArduinoSerial.readline()
-    serial_data.append(serial_line) # append the reading to the serial list
-
-
-    import json
-    with open("相对路径.json",) as f:
-        d = json.load(f)
-
-    d["x_pos"] = serial_data[x]
-    d["y_pos"] = serial_data[y]
-    d["direc"] = serial_data[pos]
-
-
-    with open("相对路径.json") as f:
-        json.dump(d)
 
 
 

@@ -228,15 +228,23 @@ void setup()
 // Main body of the code:
 void loop()
 {
+ //speed = serial.read();
+ //if speed == "turn":
+    //tot_speed = 15;
+    //correction =0;
+ //elif speed == "straight":
+    //tot_speed = 15;
+    //correction = 5;
  
- //color_sensing();
- //ultrasonic_sensor();
+ color_sensing();
+ ultrasonic_sensor();
  //acceleration();
  getheading();
- get_cont_heading(setpoint);
- myPID.Compute();
- Serial.println(correction);
- motor_shield(tot_speed + correction, tot_speed - correction);
+ //get_cont_heading(setpoint);
+ //myPID.Compute();
+ //Serial.println(correction);
+ //motor_shield(tot_speed + correction, tot_speed - correction);
+ delay(200);
    
 }
                   
