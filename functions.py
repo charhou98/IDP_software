@@ -1,8 +1,8 @@
 import serial #Serial imported for Serial communication
 import time #Required to use delay functions
 
-turning_point = {} #create a list of turning points
-set_direction = {} #create a list of designated turning directions
+turning_point = {(), (), (), (), (), ()#create a list of turning points
+set_direction = {1.52, 5.96, 4.43, 3.20, ....} #create a list of designated turning directions
 
 
 def turn(x,y,direc):
