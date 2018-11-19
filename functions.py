@@ -20,13 +20,13 @@ def turn(x,y,direc):
 
     turning_point = list({(x0, y0), (x0, y0), (x0, y0), (x0 + dx, y0),
                  (x0 + dx, y0 + dy), (x0 + dx, y0 + dy), (x0 + dx, y0 + dy), (x0 + 2*dx, y0 + dy),
-                 (x0 + 2*dx, y0 + 2*dy), (x0 + 2*dx, y0 + 2*dy), (x0 + 2*dx, y0 + 2*dy), (x0 + 3*dx, y0 + 2*dy),\n
-                 (x0 + 3*dx, y0 + 3*dy), (x0 + 3*dx, y0 + 3*dy), (x0 + 3*dx, y0 + 3*dy), (x0 + 4*dx, y0 + 3*dy),\n
-                 (x0 + 4*dx, y0 + 4*dy), (x0 + 4*dx, y0 + 4*dy), (x0 + 4*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy),\n
-                 (x0 + 5*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy), (x0 + 6*dx, y0 + 5*dy),\n
-                 (x0 + 6*dx, y0 + 5*dy), (x0 + 6*dx, y0 + 5*dy), (x0 + 6*dx, y0 + 5*dy), (x0 + 7*dx, y0 + 6*dy),\n
-                 (x0 + 7*dx, y0 + 6*dy), (x0 + 7*dx, y0 + 6*dy), (x0 + 7*dx, y0 + 6*dy), (x0 + 8*dx, y0 + 7*dy),\n
-                 (x0 + 8*dx, y0 + 7*dy), (x0 + 8*dx, y0 + 7*dy), (x0 + 8*dx, y0 + 7*dy), (x0 + 9*dx, y0 + 8*dy),\n
+                 (x0 + 2*dx, y0 + 2*dy), (x0 + 2*dx, y0 + 2*dy), (x0 + 2*dx, y0 + 2*dy), (x0 + 3*dx, y0 + 2*dy),
+                 (x0 + 3*dx, y0 + 3*dy), (x0 + 3*dx, y0 + 3*dy), (x0 + 3*dx, y0 + 3*dy), (x0 + 4*dx, y0 + 3*dy),
+                 (x0 + 4*dx, y0 + 4*dy), (x0 + 4*dx, y0 + 4*dy), (x0 + 4*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy),
+                 (x0 + 5*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy), (x0 + 6*dx, y0 + 5*dy),
+                 (x0 + 6*dx, y0 + 5*dy), (x0 + 6*dx, y0 + 5*dy), (x0 + 6*dx, y0 + 5*dy), (x0 + 7*dx, y0 + 6*dy),
+                 (x0 + 7*dx, y0 + 6*dy), (x0 + 7*dx, y0 + 6*dy), (x0 + 7*dx, y0 + 6*dy), (x0 + 8*dx, y0 + 7*dy),
+                 (x0 + 8*dx, y0 + 7*dy), (x0 + 8*dx, y0 + 7*dy), (x0 + 8*dx, y0 + 7*dy), (x0 + 9*dx, y0 + 8*dy),
                  (x0 + 9*dx, y0 + 8*dy), (x0 + 9*dx, y0 + 8*dy), (x0 + 9*dx, y0 + 8*dy), (x0 + 10*dx, y0 + 9*dy)})
     #create a list of turning points
 
@@ -55,7 +55,7 @@ def turn(x,y,direc):
 
 
         def back(x,y,direc):
-            x_wall =
+            x_wall =25
             # identify the wall position
 
             sense.x = x
@@ -88,6 +88,7 @@ def safe_mine(x,y,direc):
         time.sleep(3)
         #tell the car to push out the mine
         print("push out the mine")
+        ArduinoSerial.write('prepare_push') 
         #don't turn the direction this time
         pass turn()
         return (x,y)
@@ -160,10 +161,10 @@ while 1: #Do this forever
     y = position["current_y"]
     direc = position["current_dir"]
     turn(x,y,direc)
-    #back(x,y,direc)
+    back(x,y,direc)
     y_pos = safe_mine(x,y,direc)
     r_pos = dangerous_mine(x,y,direc)
-    centre_position(x,y,direc)
+    #centre_position(x,y,direc)
     if y_pos:
         yellow.append(y_pos)
     if r_pos:
