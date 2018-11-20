@@ -27,7 +27,7 @@ def turn(x):
 def safe_mine(x):
     # create the list for the positions of safe mines
 
-    # get the live position and direction
+    # get the live position and directio
     sense.x = x
 
 
@@ -127,21 +127,21 @@ while 1: #Do this forever
     with open('positions.json') as json_data:
         position = json_data.load()
 
-    x = position["current_x"]
-    y = position["current_y"]
-    direc = position["current_dir"]
-    turn(x,y,direc)
-    back(x,y,direc)
-    y_pos = safe_mine(x,y,direc)
-    r_pos = dangerous_mine(x,y,direc)
+    x = position["front_dis"]
+    y = position["sid_dis"]
+    #sdirec = position["current_dir"]
+    turn(x)
+    #back(x,y,direc)
+    #y_pos = safe_mine(x,y,direc)
+    #r_pos = dangerous_mine(x,y,direc)
     #centre_position(x,y,direc)
-    if y_pos:
-        yellow.append(y_pos)
-    if r_pos:
-        red.append(r_pos)
-    centre_position(x,y,direc)
+    #if y_pos:
+     #   yellow.append(y_pos)
+    #if r_pos:
+     #   red.append(r_pos)
+    #centre_position(x,y,direc)
 
-    error_adjust(x,y,direc)
+    #error_adjust(x,y,direc)
 
 
 
