@@ -2,82 +2,38 @@ import serial #Serial imported for Serial communication
 import time #Required to use delay functions
 import numpy as np
 
-
-
-x0 = 30
-y0 = 35
-dx = 20
-dy = 20
-
-
-
-def turn(x,y,direc):
+def turn(x):
 
     x0 = 30
-    y0 = 35
-    dx = 20
-    dy = 20
+    dx = 30
 
-    turning_point = list({(x0, y0), (x0, y0), (x0, y0), (x0 + dx, y0),
-                 (x0 + dx, y0 + dy), (x0 + dx, y0 + dy), (x0 + dx, y0 + dy), (x0 + 2*dx, y0 + dy),
-                 (x0 + 2*dx, y0 + 2*dy), (x0 + 2*dx, y0 + 2*dy), (x0 + 2*dx, y0 + 2*dy), (x0 + 3*dx, y0 + 2*dy),
-                 (x0 + 3*dx, y0 + 3*dy), (x0 + 3*dx, y0 + 3*dy), (x0 + 3*dx, y0 + 3*dy), (x0 + 4*dx, y0 + 3*dy),
-                 (x0 + 4*dx, y0 + 4*dy), (x0 + 4*dx, y0 + 4*dy), (x0 + 4*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy),
-                 (x0 + 5*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy), (x0 + 5*dx, y0 + 4*dy), (x0 + 6*dx, y0 + 5*dy),
-                 (x0 + 6*dx, y0 + 5*dy), (x0 + 6*dx, y0 + 5*dy), (x0 + 6*dx, y0 + 5*dy), (x0 + 7*dx, y0 + 6*dy),
-                 (x0 + 7*dx, y0 + 6*dy), (x0 + 7*dx, y0 + 6*dy), (x0 + 7*dx, y0 + 6*dy), (x0 + 8*dx, y0 + 7*dy),
-                 (x0 + 8*dx, y0 + 7*dy), (x0 + 8*dx, y0 + 7*dy), (x0 + 8*dx, y0 + 7*dy), (x0 + 9*dx, y0 + 8*dy),
-                 (x0 + 9*dx, y0 + 8*dy), (x0 + 9*dx, y0 + 8*dy), (x0 + 9*dx, y0 + 8*dy), (x0 + 10*dx, y0 + 9*dy)})
+    turning_point = list({x0, x0, x0, x0, x0, x0 + dx, x0 + dx, x0 + dx, x0 + dx, x0 + 2*dx, x0 + 2*dx, x0 + 2*dx, x0 + 2*dx})
     #create a list of turning points
 
-    set_direction = list({1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20,
-                 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20,
-                 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20,
-                 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20,
-                 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20,
-                 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20, 1.52, 5.96, 4.43, 3.20})
-    # create a list of designated turning directions
 
     # get the live position and direction
     sense.x = x
-    sense.y = y
-    sense.direction = direc
-    if round(sense.x - turning_point[i][0]) == 0 and round(sense.y - turning_point[i][1]) == 0: #when turning point is reached
+    if round(sense.x - turning_point[i]) == 0 #when turning point is reached
         i = 0 #i is counter
 
         #tell left motor to turn back
         ArduinoSerial.write('turn')
         #tell right motor to turn forward
+        time.sleep(3)  # wait for 3 seconds for the car to complete turning
 
-
-        if round(sense.direction - set_direction[i]) == 0:  #when direction has changed
-            ArduinoSerial.write('straight')               # tell motor to stop turning and go back to straight movement
-
-
-        def back(x,y,direc):
-            x_wall =25
-            # identify the wall position
-
-            sense.x = x
-            sense.y = y
-            sense.direction = direc
-
-            if sense.x == x_wall: #when the wall is hit, go back
-            #tell car to go back
-            ArduinoSerial.write('back')
-            #go back to the last turning point
-            if round(sense.x - turning_point[i][0]) == 0 and round(sense.y - turning_point[i][1]) == 0: #when the last turning point is reached
-                ArduinoSerial.write('straight')  # tell motor to stop turning and go back to straight movement
-
+        ArduinoSerial.write('straight')               # tell motor to stop turning and go back to straight movement
         i += 1  # counter plus 1, prepare for the next turning point
 
-def safe_mine(x,y,direc):
+def safe_mine(x):
     # create the list for the positions of safe mines
 
     # get the live position and direction
     sense.x = x
-    sense.y = y
-    sense.direction = direc
+
+
+    #detect safe mine
+
+    safe_mine_is_detected = yellow_value_given_by_color_sensor #等明天
 
     #when safe mine is detected
     if safe_mine_is_detected == 1:
@@ -94,13 +50,14 @@ def safe_mine(x,y,direc):
         return (x,y)
 
 
-def dangerous_mine(x,y,direc):
+def dangerous_mine(x):
     #create the list for the positions of dangerous mines
 
     # get the live position and direction   
     sense.x = x
-    sense.y = y
-    sense.direction = direc
+
+    dangerous_mine_is_detected = yellow_value_given_by_color_sensor #等明天
+
     # when dangerous mine is detected
     if dangerous_mine_is_detected == 1:
         print ("turn on red LED")
@@ -111,18 +68,17 @@ def dangerous_mine(x,y,direc):
         return (x,y)
 
 
-def centre_position(x,y,direc):
-    x_centre_point =
-    y_centre_point =
+def centre_position(x): #暂时不管了
+
+    x_centre_point = 120
     # give a centre position
 
     # get the live position and direction
     sense.x = x
-    sense.y = y
-    sense.direction = direc
+
 
     #when arrive at centre point, go back to original point
-    if round(sense.x - x_centre_point) == 0 and round(sense.y - y_centre_point) == 0:
+    if round(sense.x - x_centre_point) == 0
         # turn the car and let it point to the original point
         ArduinoSerial.write('turn')
         # when home direction has reached
@@ -139,6 +95,20 @@ def error_adjust(x,y,direc,request_direc):
     elif request_direc-direc <= -10:
         print ("turn to the other side")_
 
+def back(x,y,direc):
+    x_wall =25
+    # identify the wall position
+
+    sense.x = x
+    sense.y = y
+    sense.direction = direc
+
+    if sense.x == x_wall: #when the wall is hit, go back
+    #tell car to go back
+    ArduinoSerial.write('back')
+    #go back to the last turning point
+    if round(sense.x - turning_point[i][0]) == 0 and round(sense.y - turning_point[i][1]) == 0: #when the last turning point is reached
+    ArduinoSerial.write('straight')  # tell motor to stop turning and go back to straight movement
 
 
 #above is the function defining
@@ -152,7 +122,7 @@ print ArduinoSerial.readline() #read the serial data and print it as line
 print ("Starting program")
 yellow = []
 red = []
- 
+
 while 1: #Do this forever
     with open('positions.json') as json_data:
         position = json_data.load()
