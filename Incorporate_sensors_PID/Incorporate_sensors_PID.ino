@@ -8,8 +8,8 @@
 #define ledY 6  // yellow LEDs 
 #define ledR 7 //red LEDs
 #define IRline 41 // infrared pin
-#define echo1 23
-#define trig1 25
+#define echo1 11
+#define trig1 12
 #define echo2 29
 #define trig2 31
 #define pushb 39
@@ -19,8 +19,10 @@
 #define dist2_indc 51
 #define mag_indc 53
 const uint8_t ldr_pins[8] = {A0, A1, A2, A3, A4, A5, A6, A7};
-
+int order;
 // Global Variables
+int moter1 = 0;
+int moter2 = 0;
 int tot_speed = 0;
 int servo_pos = 0;
 long u_dist1, u_dist2;
@@ -136,7 +138,7 @@ void ultrasonic_sensor()
   
   
   if (u_dist1 >= 300 || u_dist1 <= 0){
-    Serial.println("Forward facing ultrasonic sensor out of range");
+    //Serial.println("Forward facing ultrasonic sensor out of range");
     digitalWrite(dist1_indc, HIGH);
   }
   else {
@@ -144,14 +146,14 @@ void ultrasonic_sensor()
   }
   
   if (u_dist2 >= 300 || u_dist2 <= 0){
-    Serial.println("Left facing ultrasonic sensor out of range");
+    //Serial.println("Left facing ultrasonic sensor out of range");
     digitalWrite(dist2_indc, HIGH);
   }
     else {
     digitalWrite(dist2_indc, LOW);
   }
   
-  Serial.print("(Forward, Side) Distances: "); Serial.println((u_dist1, u_dist2));
+  //Serial.print("(Forward, Side) Distances: "); Serial.print((u_dist1)); Serial.print((", ")); Serial.println((u_dist2));
 }
   
 
@@ -271,6 +273,12 @@ void get_acceleration()
 }
 
 
+// Print over serial  
+void print_all()  
+{ 
+  Serial.print(u_dist1); Serial.print(" "); Serial.println(u_dist2);  
+}
+
 
 
 // Setup runs once
@@ -300,7 +308,7 @@ void setup()
   mag.enableAutoRange(true);
 
   // Initialise the magnetometer
-  if(!mag.begin())
+  /*if(!mag.begin())
   {
     // Print error messsage if magnetometer cannot be detected
     Serial.println("Ooops, no LSM303 detected ... Check your wiring!");
@@ -315,7 +323,7 @@ void setup()
     Serial.println("Ooops, no ADXL345 detected ... Check your wiring!");
     digitalWrite(mag_indc, HIGH);
     while(1);
-  }
+  }*/
 
   AFMS.begin(); // Initiate motor driver
 
@@ -338,32 +346,35 @@ void setup()
 // All functions listed for testing - comment out as required
 void loop()
 {
- order = serial.read();
- if order == "turn":{
-    moter1 = 100;
-    moter2 = 100;}
- elif order == "straight":{
+  while(Serial.available()){
+    order = Serial.read();
+  }
+ if (order == '6'){
     moter1 = 100;
     moter2 = -100;}
- //elif order = "prepare_turn":{
+ else if (order == '5'){
+    moter1 = 100;
+    moter2 = 100;}
+ //elif order = "prepare_turn"{
    
  //}
     
 
-  mine_detection();
+  /*mine_detection();
   for (int i = 0; i <= 7; i++) { 
     if (mine_pos[i] == 1) {
       colour_sensing(i);
     }
-  }
+  }*/
   ultrasonic_sensor();
   //get_acceleration();
   //get_heading();
   //get_cont_heading(setpoint);
   //myPID.Compute();
   //Serial.println(correction);
-  //motor_shield(moter1, moter2);
+  motor_shield(moter1, moter2);
   //scoop_servo.write(servo_pos);
+  print_all();
   delay(200);
    
 }
