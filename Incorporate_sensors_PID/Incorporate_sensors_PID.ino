@@ -8,8 +8,8 @@
 #define ledY 6  // yellow LEDs 
 #define ledR 7 //red LEDs
 #define IRline 41 // infrared pin
-#define echo1 11
-#define trig1 12
+#define echo1 23
+#define trig1 25
 #define echo2 29
 #define trig2 31
 #define pushb 39
@@ -360,12 +360,13 @@ void loop()
  //}
     
 
-  /*mine_detection();
+  mine_detection();
   for (int i = 0; i <= 7; i++) { 
     if (mine_pos[i] == 1) {
       colour_sensing(i);
     }
-  }*/
+  }
+  
   ultrasonic_sensor();
   //get_acceleration();
   //get_heading();

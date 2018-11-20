@@ -30,11 +30,11 @@ def turn(x,i):
          # counter plus 1, prepare for the next turning point
     return 0
 
-def safe_mine(x):
+def safe_mine(yellow):
     # create the list for the positions of safe mines
 
     # get the live position and direction
-    sense.x = x
+    #sense.x = x
 
 
     #detect safe mine
@@ -42,35 +42,41 @@ def safe_mine(x):
     safe_mine_is_detected = yellow_value_given_by_color_sensor 
 
     #when safe mine is detected
-    if safe_mine_is_detected == 1:
-        print("turn on yellow LED")
+    if yellow == '1':
+        ArduinoSerial.write('7')#stop
+        ArduinoSerial.write('8')#yello led
         #record the position of the safe mine
         #safe_mine_position.append({sense.x, sense.y})
         #stay for 3 seconds
         time.sleep(3)
         #tell the car to push out the mine
-        print("push out the mine")
-        ArduinoSerial.write('prepare_push') 
+        ArduinoSerial.write('5')
+        #ArduinoSerial.write('prepare_push')
         #don't turn the direction this time
 #        return (x,y)
 
 
-def dangerous_mine(x):
+def dangerous_mine(red):
+    if red == '1':
+        ArduinoSerial.write('7')  # stop
+        ArduinoSerial.write('9')  # red led
+        time.sleep(3)
+        ArduinoSerial.write('5')
     #create the list for the positions of dangerous mines
 
     # get the live position and direction   
-    sense.x = x
+    #sense.x = x
 
-    dangerous_mine_is_detected = yellow_value_given_by_color_sensor 
+    #dangerous_mine_is_detected = yellow_value_given_by_color_sensor
 
     # when dangerous mine is detected
-    if dangerous_mine_is_detected == 1:
-        print ("turn on red LED")
+    #if dangerous_mine_is_detected == 1:
+     #   print ("turn on red LED")
         #record the position of the dangerous mine
-        dangerious_mine_position.append({sense.x, sense.y})
+      #  dangerious_mine_position.append({sense.x, sense.y})
         # stay for 3 seconds
-        time.sleep(3)
-        return (x,y)
+       # time.sleep(3)
+        #return (x,y)
 
 
 def centre_position(x): 
