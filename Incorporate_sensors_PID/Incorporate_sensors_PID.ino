@@ -355,7 +355,16 @@ void loop()
  else if (order == '5'){
     moter1 = 105;
     moter2 = 105;}
- //elif order = "prepare_turn"{
+ //else if order == '7'{
+   // moter1 = 0;
+  //  moter2 = 0;
+//}
+//else if (order =='8'){
+ // codes to turn on the yellow light}
+//else if (order == '9'){
+  //codes to turn on the red light
+//}
+
    
  //}
     

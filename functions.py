@@ -39,7 +39,7 @@ def safe_mine(yellow):
 
     #detect safe mine
 
-    safe_mine_is_detected = yellow_value_given_by_color_sensor 
+    #safe_mine_is_detected = yellow_value_given_by_color_sensor 
 
     #when safe mine is detected
     if yellow == '1':
