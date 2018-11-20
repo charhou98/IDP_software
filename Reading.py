@@ -12,20 +12,21 @@ while 1:
         d = json.load(f)
     serial_line = ArduinoSerial.readline()
     serial_data.append(serial_line)  #
-    temp_list=serial_line.split(" ")
+    temp_list=serial_line.split(",")
 
 
-    if temp_list[0] == "Heading":
-        direc = float(temp_list[2])
-        print(direc)
-        d["direc"] = direc
-    elif temp_list[0] != "Out":
-        distance = float(temp_list[0])
-        print(distance)
-        d["front_dis"] = distance
+    try front_dis = float(temp_list[0]):
+        print(front_dis)
+        d["front_dis"] = front_dis
+    except:
+        print "sensor error"
+    try sid_dis = float(temp_list[1):
+        print(sid_dis)
+        d["sid_dis"] = sid_dis
+    except:
+        print "sensor error"
 
-    with open("positions.json","w") as f:
-        json.dump(d,f)
+
 
 
 
