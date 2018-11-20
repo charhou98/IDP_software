@@ -13,27 +13,27 @@ def turn(x):
 
     # get the live position and direction
     sense.x = x
-    if round(sense.x - turning_point[i]) == 0 #when turning point is reached
+    if abs(round(sense.x - turning_point[i])) <= 5 #when turning point is reached
         i = 0 #i is counter
 
         #tell left motor to turn back
-        ArduinoSerial.write('turn')
+        ArduinoSerial.write('6')
         #tell right motor to turn forward
         time.sleep(3)  # wait for 3 seconds for the car to complete turning
 
-        ArduinoSerial.write('straight')               # tell motor to stop turning and go back to straight movement
+        ArduinoSerial.write('5')               # tell motor to stop turning and go back to straight movement
         i += 1  # counter plus 1, prepare for the next turning point
 
 def safe_mine(x):
     # create the list for the positions of safe mines
 
-    # get the live position and directio
+    # get the live position and direction
     sense.x = x
 
 
     #detect safe mine
 
-    safe_mine_is_detected = yellow_value_given_by_color_sensor #等明天
+    safe_mine_is_detected = yellow_value_given_by_color_sensor 
 
     #when safe mine is detected
     if safe_mine_is_detected == 1:
@@ -56,7 +56,7 @@ def dangerous_mine(x):
     # get the live position and direction   
     sense.x = x
 
-    dangerous_mine_is_detected = yellow_value_given_by_color_sensor #等明天
+    dangerous_mine_is_detected = yellow_value_given_by_color_sensor 
 
     # when dangerous mine is detected
     if dangerous_mine_is_detected == 1:
@@ -68,7 +68,7 @@ def dangerous_mine(x):
         return (x,y)
 
 
-def centre_position(x): #暂时不管了
+def centre_position(x): 
 
     x_centre_point = 120
     # give a centre position
@@ -116,20 +116,24 @@ def back(x,y,direc):
 import json
 
  
-ArduinoSerial = serial.Serial('/dev/cu.usbmodem14301',9600) #Create Serial port object called arduinoSerialData
+ArduinoSerial = serial.Serial('COM5',9600) #Create Serial port object called arduinoSerialData
 time.sleep(2) #wait for 2 secounds for the communication to get established
 print ArduinoSerial.readline() #read the serial data and print it as line
 print ("Starting program")
 yellow = []
 red = []
-
+ArduinoSerial.write('5') 
 while 1: #Do this forever
     with open('positions.json') as json_data:
         position = json_data.load()
 
     x = position["front_dis"]
     y = position["sid_dis"]
+
+    #direc = position["current_dir"]
+
     #sdirec = position["current_dir"]
+
     turn(x)
     #back(x,y,direc)
     #y_pos = safe_mine(x,y,direc)

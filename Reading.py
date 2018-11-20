@@ -3,7 +3,7 @@ import serial
 import json
 import time
 serial_data = []  # create an empty list for the data output
-ArduinoSerial = serial.Serial('/dev/cu.usbmodem14301', 9600)  # Create Serial port object called arduinoSerialData
+ArduinoSerial = serial.Serial('COM5', 9600)  # Create Serial port object called arduinoSerialData
 time.sleep(2)  # wait for 2 seconds for the communication to get established
  # read the serial data
 
@@ -12,19 +12,19 @@ while 1:
         d = json.load(f)
     serial_line = ArduinoSerial.readline()
     serial_data.append(serial_line)  #
-    temp_list=serial_line.split(",")
+    temp_list=serial_line.split(" ")
 
 
-    try front_dis = float(temp_list[0]):
-        print(front_dis)
-        d["front_dis"] = front_dis
-    except:
-        print "sensor error"
-    try sid_dis = float(temp_list[1):
-        print(sid_dis)
-        d["sid_dis"] = sid_dis
-    except:
-        print "sensor error"
+    front_dis = float(temp_list[0])
+    print(front_dis)
+    d["front_dis"] = front_dis
+    #except:
+     #   print "sensor error"
+    sid_dis = float(temp_list[1])
+    print(sid_dis)
+    d["sid_dis"] = sid_dis
+    #except:
+     #   print "sensor error"
 
 
 
@@ -39,5 +39,5 @@ while 1:
     #d["direc"] = serial_data[pos]
 
 
-    #with open(".json") as f:
-     #   json.dump(d)
+    with open("positions.json") as f:
+        json.dump(d)
