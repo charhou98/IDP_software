@@ -89,9 +89,9 @@ void motor_shield(int m1speed, int m2speed)
   }
   
   if (m2speed >= 0){
-    motor1->run(FORWARD);
+    motor2->run(FORWARD);
   }else{
-    motor1->run(BACKWARD);
+    motor2->run(BACKWARD);
   }
 
   motor1->setSpeed(abs(m1speed));
@@ -350,11 +350,11 @@ void loop()
     order = Serial.read();
   }
  if (order == '6'){
-    moter1 = 100;
-    moter2 = -100;}
+    moter1 = 105;
+    moter2 = -105;}
  else if (order == '5'){
-    moter1 = 100;
-    moter2 = 100;}
+    moter1 = 105;
+    moter2 = 105;}
  //elif order = "prepare_turn"{
    
  //}

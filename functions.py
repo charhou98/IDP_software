@@ -1,28 +1,34 @@
 import serial #Serial imported for Serial communication
 import time #Required to use delay functions
 import numpy as np
+import json
 
-def turn(x):
+def turn(x,i):
 
     x0 = 30
     dx = 30
 
-    turning_point = list({x0, x0, x0, x0, x0, x0 + dx, x0 + dx, x0 + dx, x0 + dx, x0 + 2*dx, x0 + 2*dx, x0 + 2*dx, x0 + 2*dx})
+    turning_point = [30, 30, 30, 60,60,60,90,90,90]
     #create a list of turning points
 
 
     # get the live position and direction
-    sense.x = x
-    if abs(round(sense.x - turning_point[i])) <= 5 #when turning point is reached
-        i = 0 #i is counter
+
+    if abs(x - turning_point[i])<= 5 :#when turning point is reached
+
+        print(turning_point[i])
+        print (x)#i is counter
+        print(i)
 
         #tell left motor to turn back
         ArduinoSerial.write('6')
         #tell right motor to turn forward
         time.sleep(3)  # wait for 3 seconds for the car to complete turning
 
-        ArduinoSerial.write('5')               # tell motor to stop turning and go back to straight movement
-        i += 1  # counter plus 1, prepare for the next turning point
+        ArduinoSerial.write('5')
+        return 1# tell motor to stop turning and go back to straight movement
+         # counter plus 1, prepare for the next turning point
+    return 0
 
 def safe_mine(x):
     # create the list for the positions of safe mines
@@ -46,8 +52,7 @@ def safe_mine(x):
         print("push out the mine")
         ArduinoSerial.write('prepare_push') 
         #don't turn the direction this time
-        pass turn()
-        return (x,y)
+#        return (x,y)
 
 
 def dangerous_mine(x):
@@ -78,22 +83,22 @@ def centre_position(x):
 
 
     #when arrive at centre point, go back to original point
-    if round(sense.x - x_centre_point) == 0
+#    if round(sense.x - x_centre_point) == 0
         # turn the car and let it point to the original point
-        ArduinoSerial.write('turn')
+ #       ArduinoSerial.write('turn')
         # when home direction has reached
-        if round(sense.direction - home_direction) == 0:
+  #      if round(sense.direction - home_direction) == 0:
             # tell motor to stop turning and go back to straight movement
-            ArduinoSerial.write('straight')
+   #         ArduinoSerial.write('straight')
             # when home is arrived, stop moving permanently
-            if round(sense.x) == 0 and round(sense.y) == 0:
-                break
+    #        if round(sense.x) == 0 and round(sense.y) == 0:
+     #           break
 
-def error_adjust(x,y,direc,request_direc):
-    if request_direc-direc>= 10:
-        print ("turn to one side")
-    elif request_direc-direc <= -10:
-        print ("turn to the other side")_
+#def error_adjust(x,y,direc,request_direc):
+ #   if request_direc-direc>= 10:
+  #      print ("turn to one side")
+   # elif request_direc-direc <= -10:
+    #    print ("turn to the other side")_
 
 def back(x,y,direc):
     x_wall =25
@@ -103,29 +108,28 @@ def back(x,y,direc):
     sense.y = y
     sense.direction = direc
 
-    if sense.x == x_wall: #when the wall is hit, go back
+    #if sense.x == x_wall: #when the wall is hit, go back
     #tell car to go back
-    ArduinoSerial.write('back')
+#    ArduinoSerial.write('back')
     #go back to the last turning point
-    if round(sense.x - turning_point[i][0]) == 0 and round(sense.y - turning_point[i][1]) == 0: #when the last turning point is reached
-    ArduinoSerial.write('straight')  # tell motor to stop turning and go back to straight movement
+ #   if round(sense.x - turning_point[i][0]) == 0 and round(sense.y - turning_point[i][1]) == 0: #when the last turning point is reached
+  #  ArduinoSerial.write('straight')  # tell motor to stop turning and go back to straight movement
 
 
 #above is the function defining
-#the following is the main operating function
-import json
-
- 
-ArduinoSerial = serial.Serial('COM5',9600) #Create Serial port object called arduinoSerialData
+#the following is the main operating functionimport json
+ArduinoSerial = serial.Serial('/dev/cu.usbmodem14501',9600)
 time.sleep(2) #wait for 2 secounds for the communication to get established
-print ArduinoSerial.readline() #read the serial data and print it as line
+#print ArduinoSerial.readline() #read the serial data and print it as line
 print ("Starting program")
 yellow = []
 red = []
-ArduinoSerial.write('5') 
+i=0
+ArduinoSerial.write('5')
+print('has started motor')
 while 1: #Do this forever
     with open('positions.json') as json_data:
-        position = json_data.load()
+        position = json.load(json_data)
 
     x = position["front_dis"]
     y = position["sid_dis"]
@@ -134,7 +138,8 @@ while 1: #Do this forever
 
     #sdirec = position["current_dir"]
 
-    turn(x)
+
+    i+= turn(x,i)
     #back(x,y,direc)
     #y_pos = safe_mine(x,y,direc)
     #r_pos = dangerous_mine(x,y,direc)

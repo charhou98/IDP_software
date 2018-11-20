@@ -24,20 +24,11 @@ while 1:
     print(sid_dis)
     d["sid_dis"] = sid_dis
     #except:
-     #   print "sensor error"
-
-
-
-
-
-
-
-
-
+     #   print "sensor error"s
 
     #d["y_pos"] = serial_data[y]
     #d["direc"] = serial_data[pos]
 
 
-    with open("positions.json") as f:
+    with open('positions.json','w') as f:
         json.dump(d,f)
