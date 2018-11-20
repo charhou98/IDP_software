@@ -3,7 +3,7 @@ import serial
 import json
 import time
 serial_data = []  # create an empty list for the data output
-ArduinoSerial = serial.Serial('COM5', 9600)  # Create Serial port object called arduinoSerialData
+ArduinoSerial = serial.Serial('/dev/cu.usbmodem14501', 9600)  # Create Serial port object called arduinoSerialData
 time.sleep(2)  # wait for 2 seconds for the communication to get established
  # read the serial data
 
@@ -40,4 +40,4 @@ while 1:
 
 
     with open("positions.json") as f:
-        json.dump(d)
+        json.dump(d,f)
