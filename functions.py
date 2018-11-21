@@ -14,7 +14,7 @@ def turn(x,i):
 
     # get the live position and direction
 
-    if abs(x - turning_point[i])<= 5 :#when turning point is reached
+    if abs(x - turning_point[i]) <= 5 :#when turning point is reached
 
         print(turning_point[i])
         print (x)#i is counter

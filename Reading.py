@@ -19,7 +19,7 @@ while 1:
     d["error"] = d["p_sid_dis"] - float(temp_list[1])
 
 
-    if abs(d["error"] ) >= 5 and d["error"]*d["p_error"] >= 0:
+    if abs(d["error"] ) >= 3 and d["error"]*d["p_error"] >= 0:
         d["error_time"] += 1
     else:
         d["error_time"] = 0
