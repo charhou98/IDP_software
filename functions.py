@@ -150,6 +150,10 @@ while 1: #Do this forever
 
     x = position["front_dis"]
     y = position["sid_dis"]
+    yellow = position["yellow"]
+    red = position["red"]
+    safe_mine(yellow)
+    dangerous_mine(red)
 
     #direc = position["current_dir"]
 
