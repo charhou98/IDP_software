@@ -106,15 +106,15 @@ def dangerous_mine(red):
    # elif request_direc-direc <= -10:
     #    print ("turn to the other side")_
 
-#def error_control(error):
- #   if error > 0:
-  #      ArduinoSerial.write('10') #move to the inside
-        #time.sleep(1)
-        #ArduinoSerial.write('5')
-   # if error < 0:
-    #    ArduinoSerial.write('11') #move to outside
-        #time.sleep(1)
-       # ArduinoSerial.write('5')
+def error_control(error):
+    if error > 0:
+        ArduinoSerial.write('10') #move to the inside
+        time.sleep(1)
+        ArduinoSerial.write('5')
+    if error < 0:
+        ArduinoSerial.write('11') #move to outside
+        time.sleep(1)
+        ArduinoSerial.write('5')
 
 
 #def back(x,y,direc):
@@ -170,8 +170,7 @@ while 1: #Do this forever
 
 
     #back(x,y,direc)
-    #y_pos = safe_mine(x,y,direc)
-    #r_pos = dangerous_mine(x,y,direc)
+
     #centre_position(x,y,direc)
     #if y_pos:
      #   yellow.append(y_pos)
