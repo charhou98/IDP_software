@@ -53,7 +53,7 @@ Servo scoop_servo;  // create servo object to control a servo
 // Holds up code until push button is pressed (pushb pin high)
 void wait_for_push()
 {
-  const uint8_t indc_pins[] = {Y_mine_indc, R_mine_indc, dist1_indc, dist2_indc, mag_indc};
+  const uint8_t indc_pins[] = {R_mine_indc, Y_mine_indc, dist1_indc, dist2_indc, mag_indc};
   int led = 0;
   bool up = true;
   while (digitalRead(pushb) == LOW) {
@@ -164,14 +164,14 @@ void mine_detection()
   int ldr_val = 0;
   int ldr_sum = 0;
   int ldr_avg = 0;
-  for (int i = 3; i <= 4; i++) {
+  for (int i = 0; i <= 7; i++) {
     ldr_val = analogRead(ldr_pins[i]);
     ldr_values[i] = ldr_val;
     ldr_sum += ldr_val;  
   }
-  ldr_avg = ldr_sum / 2;
+  ldr_avg = ldr_sum / 8;
 
-  for (int i = 3; i <= 4; i++) {
+  for (int i = 0; i <= 7; i++) {
     if (ldr_values[i] > ldr_avg*1.1) {
       motor_shield(0,0);
       mine_pos[i] = 1;   
@@ -360,11 +360,18 @@ void loop()
   //  moter2 = 0;
 //}
 //else if (order =='8'){
- // digitalWrite(ledY, HIGH} // turn on yellow leds
+ // codes to turn on the yellow light}
 //else if (order == '9'){
-  //digitalWrite(ledR, HIGH} // turn on red leds
+  //codes to turn on the red light
 //}
-
+//else if (order == '10'){
+    //moter1 = 100;
+    //moter2 = 110;
+ //   }
+//else if (other == '11'){
+// moter1 = 110;
+//moter2 = 100;
+//}
    
  //}
     

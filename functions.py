@@ -108,9 +108,13 @@ def dangerous_mine(red):
 
 #def error_control(error):
  #   if error > 0:
-  #      ArduinoSerial.write('10') #move to the outside
+  #      ArduinoSerial.write('10') #move to the inside
+        #time.sleep(1)
+        #ArduinoSerial.write('5')
    # if error < 0:
-    #    ArduinoSerial.write('11') #move to inside
+    #    ArduinoSerial.write('11') #move to outside
+        #time.sleep(1)
+       # ArduinoSerial.write('5')
 
 
 #def back(x,y,direc):
