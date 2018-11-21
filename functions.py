@@ -79,13 +79,13 @@ def dangerous_mine(red):
         #return (x,y)
 
 
-def centre_position(x): 
+#def centre_position(x): 
 
-    x_centre_point = 120
+ #   x_centre_point = 120
     # give a centre position
 
     # get the live position and direction
-    sense.x = x
+  #  sense.x = x
 
 
     #when arrive at centre point, go back to original point
@@ -106,13 +106,20 @@ def centre_position(x):
    # elif request_direc-direc <= -10:
     #    print ("turn to the other side")_
 
-def back(x,y,direc):
-    x_wall =25
+#def error_control(error):
+ #   if error > 0:
+  #      ArduinoSerial.write('10') #move to the outside
+   # if error < 0:
+    #    ArduinoSerial.write('11') #move to inside
+
+
+#def back(x,y,direc):
+ #   x_wall =25
     # identify the wall position
 
-    sense.x = x
-    sense.y = y
-    sense.direction = direc
+  #  sense.x = x
+   # sense.y = y
+    #sense.direction = direc
 
     #if sense.x == x_wall: #when the wall is hit, go back
     #tell car to go back
@@ -146,6 +153,14 @@ while 1: #Do this forever
 
 
     i+= turn(x,i)
+
+
+    #error control
+    #if position["error_time"] >= 4:
+     #   error_control(d["error"])
+
+
+
     #back(x,y,direc)
     #y_pos = safe_mine(x,y,direc)
     #r_pos = dangerous_mine(x,y,direc)

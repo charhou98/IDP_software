@@ -14,6 +14,16 @@ while 1:
     serial_data.append(serial_line)  #
     temp_list=serial_line.split(" ")
 
+#error handling
+    d["p_error"] = d["error"]
+    d["error"] = d["p_sid_dis"] - float(temp_list[1])
+
+
+    if abs(d["error"] ) >= 5 and d["error"]*d["p_error"] >= 0:
+        d["error_time"] += 1
+    else:
+        d["error_time"] = 0
+
 
     front_dis = float(temp_list[0])
     print(front_dis)
@@ -23,6 +33,8 @@ while 1:
     sid_dis = float(temp_list[1])
     print(sid_dis)
     d["sid_dis"] = sid_dis
+    print (d)
+
     #except:
      #   print "sensor error"s
 
