@@ -2,7 +2,6 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_LSM303_U.h>
 #include <Adafruit_MotorShield.h>
-#include <PID_v1.h>
 #include <Servo.h>
 
 #define ledY 6  // yellow LEDs 
@@ -10,28 +9,26 @@
 #define IRline 41 // infrared pin
 #define echo1 23
 #define trig1 25
-#define echo2 29
-#define trig2 31
+#define echo2 35
+#define trig2 37
 #define pushb 39
 #define R_mine_indc 45
 #define Y_mine_indc 47
 #define dist1_indc 49
 #define dist2_indc 51
 #define mag_indc 53
-const uint8_t ldr_pins[8] = {A0, A1, A2, A3, A4, A5, A6, A7};
+const uint8_t ldr_pins[8] = {A0, A1, A2, A3, A12, A13, A14, A15};
 int order;
+
 // Global Variables
 int moter1 = 0;
 int moter2 = 0;
-int tot_speed = 0;
 int servo_pos = 0;
 long u_dist1, u_dist2;
+long heading;
+int ldr_avg = 0;
 uint8_t mine_pos[8] = {0,0,0,0,0,0,0,0};
-
-//Specify the variables and initial tuning parameters for PID control
-double setpoint, heading, cont_heading, correction;
-const int Kp=40, Ki=10, Kd=0;
-PID myPID(&cont_heading, &correction, &setpoint, Kp, Ki, Kd, P_ON_E, DIRECT);
+const float ldr_calibration[8] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
 // Assign a unique ID to magnetometer
 Adafruit_LSM303_Mag_Unified mag = Adafruit_LSM303_Mag_Unified(12345);
@@ -160,20 +157,22 @@ void ultrasonic_sensor()
 // Mine detection based on whether one LDR sees significantly higher intensity than average
 void mine_detection()
 {
-  uint8_t ldr_values[8] = {0,0,0,0,0,0,0,0};
+  int ldr_values[8] = {0,0,0,0,0,0,0,0};
   int ldr_val = 0;
   int ldr_sum = 0;
-  int ldr_avg = 0;
   for (int i = 0; i <= 7; i++) {
     ldr_val = analogRead(ldr_pins[i]);
+    ldr_val *= ldr_calibration[i];
     ldr_values[i] = ldr_val;
-    ldr_sum += ldr_val;  
+    ldr_sum += ldr_val;
+    Serial.print(ldr_val); Serial.print(" ");
   }
   ldr_avg = ldr_sum / 8;
+  Serial.println();
+  Serial.println(ldr_avg);
 
   for (int i = 0; i <= 7; i++) {
-    if (ldr_values[i] > ldr_avg*1.1) {
-      motor_shield(0,0);
+    if (ldr_values[i] > ldr_avg*1.2) {
       mine_pos[i] = 1;   
     }
     else {
@@ -189,31 +188,30 @@ void colour_sensing(int ldr_num)
 {
   int red_intensity;
   int yel_intensity;
-  int red_counter = 0;
+  int red_total = 0;
+  int yel_total = 0;
   int ldr = ldr_pins[ldr_num];
-  for (int i = 0; i < 30; i++) {
+  for (int i = 0; i < 8; i++) {
     digitalWrite(ledY, LOW);
     digitalWrite(ledR, HIGH);
-    delay(20);
+    delay(100);
     red_intensity = analogRead(ldr);
+    Serial.print(red_intensity); Serial.print(" ");
     digitalWrite(ledR, LOW);
     digitalWrite(ledY, HIGH);
-    delay(20);
+    delay(100);
     yel_intensity = analogRead(ldr);
-    digitalWrite(ledY, LOW);
+    Serial.println(yel_intensity);
 
-    if (red_intensity > yel_intensity*1.01) {
-      red_counter++;
-    }
-    else if (red_intensity < yel_intensity*0.99) {
-      red_counter--;
-    }
+    red_total += red_intensity * ldr_calibration[ldr_num];
+    yel_total += yel_intensity * ldr_calibration[ldr_num];
   }
-  if (red_counter > 5) {
-    Serial.print("Red mine under ldr number "); Serial.println(ldr_num);
-  }
-  else if (red_counter < 5) {
+  
+  if (yel_total > 8*ldr_avg*2) {
     Serial.print("Yellow mine under ldr number "); Serial.println(ldr_num);
+  }
+  else if (yel_total <= 8*ldr_avg*1.8) {
+    Serial.print("Red mine under ldr number "); Serial.println(ldr_num);
   }
   else {
     Serial.print("Unknown object under ldr number "); Serial.println(ldr_num);
@@ -241,24 +239,6 @@ void get_heading()
 }
 
 
-// Function to make heading continuous, i.e -PI to +3PI range 
-void get_cont_heading(double setpoint)
-{
-  if (setpoint < PI && heading > setpoint + PI)
-  {
-    cont_heading = heading - 2*PI;
-  }
-  else if (setpoint > PI && heading < setpoint - PI)
-  {
-    cont_heading = heading + 2*PI;
-  }
-  else
-  {
-    cont_heading = heading;
-  }
-}
-
-
 // Print accelerations over serial
 void get_acceleration()
 {
@@ -273,7 +253,7 @@ void get_acceleration()
 }
 
 
-// Print over serial  
+// Print information required by software over serial  
 void print_all()  
 { 
   Serial.print(u_dist1); Serial.print(" "); Serial.println(u_dist2);  
@@ -307,33 +287,27 @@ void setup()
   // Enable magnetometer auto-gain
   mag.enableAutoRange(true);
 
-  // Initialise the magnetometer
-  /*if(!mag.begin())
+  //Check for magnetometer/accelerometer
+  if(!mag.begin())
   {
     // Print error messsage if magnetometer cannot be detected
-    Serial.println("Ooops, no LSM303 detected ... Check your wiring!");
+    //Serial.println("Ooops, no LSM303 detected ... Check your wiring!");
     digitalWrite(mag_indc, HIGH);
-    while(1);
+    //while(1);
   }
 
   // Initialise the accelerometer
   if(!accel.begin())
   {
     // Print error messsage if accelerometer cannot be detected
-    Serial.println("Ooops, no ADXL345 detected ... Check your wiring!");
+    //Serial.println("Ooops, no ADXL345 detected ... Check your wiring!");
     digitalWrite(mag_indc, HIGH);
-    while(1);
-  }*/
+    //while(1);
+  }
 
   AFMS.begin(); // Initiate motor driver
 
   scoop_servo.attach(9); // Attaches scoop servo to pin 9
-
-  myPID.SetMode(AUTOMATIC); // Turn PID control on
-  myPID.SetOutputLimits(-255, 255); // Set limits to motor speed range
-  myPID.SetSampleTime(100); // Sample time in ms
-  setpoint = 3.91;
-  tot_speed = 100;
 
   //wait_for_push();
   digitalWrite(ledR, HIGH);
@@ -349,36 +323,35 @@ void loop()
   while(Serial.available()){
     order = Serial.read();
   }
- if (order == '6'){
+  if (order == '6'){
     moter1 = -105;
-    moter2 = 105;}
- else if (order == '5'){
+    moter2 = 105;
+  }
+  else if (order == '5'){
     moter1 = 105;
-    moter2 = 105;}
- else if (order == '7'){
+    moter2 = 105;
+  }
+  else if (order == '7'){
     moter1 = 0;
     moter2 = 0;
-}
+  }
 //else if (order =='8'){
   //codes to turn on the yellow light}
 //else if (order == '9'){
   //codes to turn on the red light
 //}
-else if (order == '10'){
+  else if (order == '10'){
     moter1 = 110;
     moter2 = 100;
-    }
-else if (other == '11'){
-  moter1 = 100;
-
-  moter2 = 110;
-}
-else if (other == '12'){
-  moter1 = -105;
-  moter2 = -105;
   }
-   
- //}
+  else if (order == '11'){
+    moter1 = 100;
+    moter2 = 110;
+  }
+  else if (order == '12'){
+    moter1 = -105;
+    moter2 = -105;
+  }
     
 
   mine_detection();
@@ -391,8 +364,6 @@ else if (other == '12'){
   ultrasonic_sensor();
   //get_acceleration();
   //get_heading();
-  //get_cont_heading(setpoint);
-  //myPID.Compute();
   //Serial.println(correction);
   motor_shield(moter1, moter2);
   //scoop_servo.write(servo_pos);
