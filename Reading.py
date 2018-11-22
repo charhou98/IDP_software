@@ -15,14 +15,15 @@ while 1:
     temp_list=serial_line.split(" ")
 
 #error handling
-    d["p_error"] = d["error"]
-    d["error"] = d["p_sid_dis"] - float(temp_list[1])
+    #d["p_sid_dis"] = d["sid_dis"]
+    #d["p_error"] = d["error"]
+    #d["error"] = d["p_sid_dis"] - float(temp_list[1])
 
 
-    if abs(d["error"] ) >= 3 and d["error"]*d["p_error"] >= 0:
-        d["error_time"] += 1
-    else:
-        d["error_time"] = 0
+    #if abs(d["error"] ) >= 3 and d["error"]*d["p_error"] >= 0:
+     #   d["error_time"] += 1
+    #else:
+     #   d["error_time"] = 0
 
 
     front_dis = float(temp_list[0])
@@ -34,6 +35,13 @@ while 1:
     print(sid_dis)
     d["sid_dis"] = sid_dis
     print (d)
+
+    if len(temp_list) >=  3:
+        yellow = int(temp_list[2])
+        red = int(temp_list[3])
+        d["yellow"] = yellow
+        d["red"] = red
+
 
     #except:
      #   print "sensor error"s

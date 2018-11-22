@@ -117,6 +117,7 @@ def error_control(error):
         ArduinoSerial.write('5')
 
 
+
 def back(x):
     x_wall =25
     current_x =  x
@@ -130,6 +131,8 @@ def back(x):
 
 
 
+#def back(x,y,direc):
+ #   x_wall =25
 
     # identify the wall position
 
@@ -182,8 +185,7 @@ while 1: #Do this forever
 
 
     #back(x,y,direc)
-    #y_pos = safe_mine(x,y,direc)
-    #r_pos = dangerous_mine(x,y,direc)
+
     #centre_position(x,y,direc)
     #if y_pos:
      #   yellow.append(y_pos)

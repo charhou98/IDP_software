@@ -335,7 +335,7 @@ void setup()
   setpoint = 3.91;
   tot_speed = 100;
 
-  wait_for_push();
+  //wait_for_push();
   digitalWrite(ledR, HIGH);
   digitalWrite(ledY, HIGH);
 }
@@ -350,28 +350,29 @@ void loop()
     order = Serial.read();
   }
  if (order == '6'){
-    moter1 = 105;
-    moter2 = -105;}
+    moter1 = -105;
+    moter2 = 105;}
  else if (order == '5'){
     moter1 = 105;
     moter2 = 105;}
- //else if order == '7'{
-   // moter1 = 0;
-  //  moter2 = 0;
-//}
+ else if (order == '7'){
+    moter1 = 0;
+    moter2 = 0;
+}
 //else if (order =='8'){
  // codes to turn on the yellow light}
 //else if (order == '9'){
   //codes to turn on the red light
 //}
-//else if (order == '10'){
-    //moter1 = 100;
-    //moter2 = 110;
- //   }
-//else if (other == '11'){
-// moter1 = 110;
-//moter2 = 100;
-//}
+else if (order == '10'){
+    moter1 = 110;
+    moter2 = 100;
+    }
+else if (other == '11'){
+  moter1 = 100;
+
+  moter2 = 110;
+}
    
  //}
     
