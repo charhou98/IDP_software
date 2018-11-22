@@ -157,6 +157,8 @@ print ("Starting program")
 yellow = []
 red = []
 i=0
+ArduinoSerial.write('6')
+time.sleep(3)
 ArduinoSerial.write('5')
 print('has started motor')
 while 1: #Do this forever
@@ -178,9 +180,9 @@ while 1: #Do this forever
     i+= turn(x,i)
 
 
-    #error control
-    #if position["error_time"] >= 4:
-     #   error_control(d["error"])
+    error control
+    if position["error_time"] >= 4:
+        error_control(d["error"])
 
 
 
