@@ -106,19 +106,31 @@ def dangerous_mine(red):
    # elif request_direc-direc <= -10:
     #    print ("turn to the other side")_
 
-#def error_control(error):
- #   if error > 0:
-  #      ArduinoSerial.write('10') #move to the inside
-        #time.sleep(1)
-        #ArduinoSerial.write('5')
-   # if error < 0:
-    #    ArduinoSerial.write('11') #move to outside
-        #time.sleep(1)
-       # ArduinoSerial.write('5')
+def error_control(error):
+    if error > 0:
+        ArduinoSerial.write('10') #move to the inside
+        time.sleep(1)
+        ArduinoSerial.write('5')
+    if error < 0:
+        ArduinoSerial.write('11') #move to outside
+        time.sleep(1)
+        ArduinoSerial.write('5')
 
 
-#def back(x,y,direc):
- #   x_wall =25
+def back(x):
+    x_wall =25
+    current_x =  x
+    ArduinoSerial.write('5')
+    second = x/10
+    time.sleep(second)
+    ArduinoSerial.write('12')#code for car to go back
+    time.sleep(second)
+    ArduinoSerial.wirte('5')
+
+
+
+
+
     # identify the wall position
 
   #  sense.x = x
@@ -178,12 +190,7 @@ while 1: #Do this forever
     #if r_pos:
      #   red.append(r_pos)
     #centre_position(x,y,direc)
-
-    #error_adjust(x,y,direc)
-
-
-
-
+ 
 
     time.sleep(1)
 
