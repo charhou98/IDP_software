@@ -15,15 +15,15 @@ while 1:
     temp_list=serial_line.split(" ")
 
 #error handling
-    #d["p_sid_dis"] = d["sid_dis"]
-    #d["p_error"] = d["error"]
-    #d["error"] = d["p_sid_dis"] - float(temp_list[1])
+    d["p_sid_dis"] = d["sid_dis"]
+    d["p_error"] = d["error"]
+    d["error"] = d["p_sid_dis"] - float(temp_list[1])
 
 
-    #if abs(d["error"] ) >= 3 and d["error"]*d["p_error"] >= 0:
-     #   d["error_time"] += 1
-    #else:
-     #   d["error_time"] = 0
+    if abs(d["error"] ) >= 5 and d["error"]*d["p_error"] >= 0:
+        d["error_time"] += 1
+    else:
+        d["error_time"] = 0
 
 
     front_dis = float(temp_list[0])

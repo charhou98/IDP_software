@@ -374,8 +374,8 @@ else if (other == '11'){
   moter2 = 110;
 }
 else if (other == '12'){
-  moter1 = -105
-  moter2 = -105
+  moter1 = -105;
+  moter2 = -105;
   }
    
  //}
