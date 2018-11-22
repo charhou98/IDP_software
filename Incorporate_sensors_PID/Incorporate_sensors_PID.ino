@@ -360,7 +360,7 @@ void loop()
     moter2 = 0;
 }
 //else if (order =='8'){
- // codes to turn on the yellow light}
+  //codes to turn on the yellow light}
 //else if (order == '9'){
   //codes to turn on the red light
 //}
@@ -373,6 +373,10 @@ else if (other == '11'){
 
   moter2 = 110;
 }
+else if (other == '12'){
+  moter1 = -105
+  moter2 = -105
+  }
    
  //}
     
