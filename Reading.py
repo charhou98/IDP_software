@@ -3,7 +3,7 @@ import serial
 import json
 import time
 serial_data = []  # create an empty list for the data output
-ArduinoSerial = serial.Serial('/dev/cu.usbmodem14501', 9600)  # Create Serial port object called arduinoSerialData
+ArduinoSerial = serial.Serial('COM5', 9600)  # Create Serial port object called arduinoSerialData
 time.sleep(2)  # wait for 2 seconds for the communication to get established
  # read the serial data
 
@@ -17,7 +17,7 @@ while 1:
 #error handling
     d["p_sid_dis"] = d["sid_dis"]
     d["p_error"] = d["error"]
-    d["error"] = d["p_sid_dis"] - float(temp_list[1])
+    d["error"] = d["p_sid_dis"] - float(temp_list[0])
 
 
     if abs(d["error"] ) >= 5 and d["error"]*d["p_error"] >= 0:
@@ -26,12 +26,12 @@ while 1:
         d["error_time"] = 0
 
 
-    front_dis = float(temp_list[0])
+    front_dis = float(temp_list[1])
     print(front_dis)
     d["front_dis"] = front_dis
     #except:
      #   print "sensor error"
-    sid_dis = float(temp_list[1])
+    sid_dis = float(temp_list[0])
     print(sid_dis)
     d["sid_dis"] = sid_dis
     print (d)

@@ -1,6 +1,6 @@
 import serial #Serial imported for Serial communication
 import time #Required to use delay functions
-import numpy as np
+#import numpy as np
 import json
 
 def turn(x,i):
@@ -126,7 +126,7 @@ def back(x):
     time.sleep(second)
     ArduinoSerial.write('12')#code for car to go back
     time.sleep(second)
-    ArduinoSerial.wirte('5')
+    ArduinoSerial.write('5')
 
 
 
@@ -150,20 +150,61 @@ def back(x):
 
 #above is the function defining
 #the following is the main operating functionimport json
-ArduinoSerial = serial.Serial('/dev/cu.usbmodem14501',9600)
+ArduinoSerial = serial.Serial('COM5',9600)
 time.sleep(2) #wait for 2 secounds for the communication to get established
 #print ArduinoSerial.readline() #read the serial data and print it as line
 print ("Starting program")
 yellow = []
 red = []
 i=0
-ArduinoSerial.write('6')
-time.sleep(3)
+position = {"error_time": 0, "p_sid_dis": 35.0, "yellow": 0, "front_dis": 32.0, "p_error": 0.0, "red": 0, "error": 0.0, "sid_dis": 35.0}
+#ArduinoSerial.write('6')
+#ime.sleep(3)
 ArduinoSerial.write('5')
 print('has started motor')
 while 1: #Do this forever
-    with open('positions.json') as json_data:
-        position = json.load(json_data)
+
+    serial_line = ArduinoSerial.readline()
+    #serial_data.append(serial_line)  #
+    temp_list=serial_line.split(" ")
+
+#error handling
+    position["p_sid_dis"] = position["sid_dis"]
+    position["p_error"] = position["error"]
+    position["error"] = position["p_sid_dis"] - float(temp_list[0])
+
+
+    if abs(position["error"] ) >= 2 and position["error"]*position["p_error"] >= 0:
+        position["error_time"] += 1
+    else:
+        position["error_time"] = 0
+
+
+    front_dis = float(temp_list[1])
+    print(front_dis)
+    position["front_dis"] = front_dis
+    #except:
+     #   print "sensor error"
+    sid_dis = float(temp_list[0])
+    print(sid_dis)
+    position["sid_dis"] = sid_dis
+    print (position)
+
+    if len(temp_list) >=  3:
+        yellow = int(temp_list[2])
+        red = int(temp_list[3])
+        position["yellow"] = yellow
+        position["red"] = red
+
+
+    #except:
+     #   print "sensor error"s
+
+    #d["y_pos"] = serial_data[y]
+    #d["direc"] = serial_data[pos]
+
+
+
 
     x = position["front_dis"]
     y = position["sid_dis"]
@@ -180,9 +221,9 @@ while 1: #Do this forever
     i+= turn(x,i)
 
 
-    error control
-    if position["error_time"] >= 4:
-        error_control(d["error"])
+    #error control
+    if int(position["error_time"]) >= 4:
+        error_control(position["error"])
 
 
 
@@ -196,7 +237,7 @@ while 1: #Do this forever
     #centre_position(x,y,direc)
  
 
-    time.sleep(1)
+    
 
 
 
