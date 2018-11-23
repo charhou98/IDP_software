@@ -7,11 +7,11 @@
 #define ledY 6  // yellow LEDs 
 #define ledR 7 //red LEDs
 #define IRline 41 // infrared pin
-#define echo1 23
-#define trig1 25
-#define echo2 35
-#define trig2 37
-#define pushb 39
+#define echo1 38
+#define trig1 39
+#define echo2 40
+#define trig2 41
+#define pushb 35
 #define R_mine_indc 45
 #define Y_mine_indc 47
 #define dist1_indc 49
@@ -28,7 +28,7 @@ long u_dist1, u_dist2;
 long heading;
 int ldr_avg = 0;
 uint8_t mine_pos[8] = {0,0,0,0,0,0,0,0};
-const float ldr_calibration[8] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+const float ldr_calibration[8] = {0.98, 1.22, 1.0, 0.92, 0.90, 1.08, 0.96, 0.98};
 
 // Assign a unique ID to magnetometer
 Adafruit_LSM303_Mag_Unified mag = Adafruit_LSM303_Mag_Unified(12345);
@@ -173,12 +173,14 @@ void mine_detection()
 
   for (int i = 0; i <= 7; i++) {
     if (ldr_values[i] > ldr_avg*1.2) {
-      mine_pos[i] = 1;   
+      mine_pos[i] = 1;
+      ldr_avg = (ldr_avg*8 - ldr_values[i])/7;
     }
     else {
       mine_pos[i] = 0;
     }
   }
+  Serial.println(ldr_avg);
 
 }
 
@@ -192,8 +194,8 @@ void colour_sensing(int ldr_num)
   int yel_total = 0;
   int ldr = ldr_pins[ldr_num];
   for (int i = 0; i < 8; i++) {
-    digitalWrite(ledY, LOW);
-    digitalWrite(ledR, HIGH);
+    //digitalWrite(ledY, LOW);
+    //digitalWrite(ledR, HIGH);
     delay(100);
     red_intensity = analogRead(ldr);
     Serial.print(red_intensity); Serial.print(" ");
@@ -206,15 +208,21 @@ void colour_sensing(int ldr_num)
     red_total += red_intensity * ldr_calibration[ldr_num];
     yel_total += yel_intensity * ldr_calibration[ldr_num];
   }
-  
-  if (yel_total > 8*ldr_avg*2) {
+
+  if (yel_total > 8*ldr_avg*1.35) {
     Serial.print("Yellow mine under ldr number "); Serial.println(ldr_num);
+    digitalWrite(R_mine_indc, LOW);
+    digitalWrite(Y_mine_indc, HIGH);
   }
-  else if (yel_total <= 8*ldr_avg*1.8) {
+  else if (yel_total <= 8*ldr_avg*1.35) {
     Serial.print("Red mine under ldr number "); Serial.println(ldr_num);
+    digitalWrite(Y_mine_indc, LOW);
+    digitalWrite(R_mine_indc, HIGH);
   }
   else {
     Serial.print("Unknown object under ldr number "); Serial.println(ldr_num);
+    digitalWrite(R_mine_indc, HIGH);
+    digitalWrite(Y_mine_indc, HIGH);
   }
   digitalWrite(ledR, HIGH);
   digitalWrite(ledY, HIGH);
@@ -312,6 +320,7 @@ void setup()
   //wait_for_push();
   digitalWrite(ledR, HIGH);
   digitalWrite(ledY, HIGH);
+  delay(1000);
 }
 
 
@@ -354,12 +363,12 @@ void loop()
   }
     
 
-  mine_detection();
+  /*mine_detection();
   for (int i = 0; i <= 7; i++) { 
     if (mine_pos[i] == 1) {
       colour_sensing(i);
     }
-  }
+  }*/
   
   ultrasonic_sensor();
   //get_acceleration();

@@ -9,8 +9,8 @@
   Original code improvements to the Ping sketch sourced from Trollmaker.com
   Some code and wiring inspired by http://en.wikiversity.org/wiki/User:Dstaub/robotcar
   */
-#define trigPin 13
-#define echoPin 12
+#define trigPin 39
+#define echoPin 38
 
 void setup() {
   Serial.begin (9600);
@@ -34,5 +34,5 @@ void loop() {
     Serial.print(distance);
     Serial.println(" cm");
   }
-  delay(100);
+  //delay(100);
 }
