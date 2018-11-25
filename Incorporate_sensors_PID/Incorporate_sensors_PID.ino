@@ -344,11 +344,7 @@ void loop()
     moter1 = 0;
     moter2 = 0;
   }
-//else if (order =='8'){
-  //codes to turn on the yellow light}
-//else if (order == '9'){
-  //codes to turn on the red light
-//}
+  
   else if (order == '10'){
     moter1 = 110;
     moter2 = 100;
@@ -361,7 +357,13 @@ void loop()
     moter1 = -105;
     moter2 = -105;
   }
+  else if (order == '13'){
+
+      for (int i = 0; i <= 7; i++) { 
+    if (mine_pos[i] == 1) {
+      colour_sensing(i);
     
+  }
 
   /*mine_detection();
   for (int i = 0; i <= 7; i++) { 
