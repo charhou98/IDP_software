@@ -30,7 +30,13 @@ def turn(x,i):
          # counter plus 1, prepare for the next turning point
     return 0
 
-def safe_mine(yellow):
+def check(check):
+    if check == 1:
+        ArduinoSerial.write('13')
+
+
+
+def safe_mine(yellow,x):
     # create the list for the positions of safe mines
 
     # get the live position and direction
@@ -44,22 +50,22 @@ def safe_mine(yellow):
     #when safe mine is detected
     if yellow == '1':
         ArduinoSerial.write('7')#stop
-        ArduinoSerial.write('8')#yello led
         #record the position of the safe mine
         #safe_mine_position.append({sense.x, sense.y})
         #stay for 3 seconds
         time.sleep(3)
         #tell the car to push out the mine
         ArduinoSerial.write('5')
+        back(x)
+
         #ArduinoSerial.write('prepare_push')
         #don't turn the direction this time
 #        return (x,y)
 
 
-def dangerous_mine(red):
+def dangerous_mine(red,x):
     if red == '1':
         ArduinoSerial.write('7')  # stop
-        ArduinoSerial.write('9')  # red led
         time.sleep(3)
         ArduinoSerial.write('5')
     #create the list for the positions of dangerous mines
@@ -121,9 +127,7 @@ def error_control(error):
 def back(x):
     x_wall =25
     current_x =  x
-    ArduinoSerial.write('5')
     second = x/10
-    time.sleep(second)
     ArduinoSerial.write('12')#code for car to go back
     time.sleep(second)
     ArduinoSerial.write('5')
@@ -157,12 +161,13 @@ print ("Starting program")
 yellow = []
 red = []
 i=0
-position = {"error_time": 0, "p_sid_dis": 35.0, "yellow": 0, "front_dis": 32.0, "p_error": 0.0, "red": 0, "error": 0.0, "sid_dis": 35.0}
+position = {"error_time": 0, "p_sid_dis": 35.0, "yellow": 0, "front_dis": 32.0, "p_error": 0.0, "red": 0, "error": 0.0, "sid_dis": 35.0,"checklist":[], "check":0}
 #ArduinoSerial.write('6')
 #ime.sleep(3)
 ArduinoSerial.write('5')
 print('has started motor')
 while 1: #Do this forever
+
 
     serial_line = ArduinoSerial.readline()
     #serial_data.append(serial_line)  #
@@ -179,6 +184,9 @@ while 1: #Do this forever
     else:
         position["error_time"] = 0
 
+#how to read sensor
+
+
 
     front_dis = float(temp_list[1])
     print(front_dis)
@@ -190,32 +198,34 @@ while 1: #Do this forever
     position["sid_dis"] = sid_dis
     print (position)
 
-    if len(temp_list) >=  3:
-        yellow = int(temp_list[2])
-        red = int(temp_list[3])
-        position["yellow"] = yellow
-        position["red"] = red
-
-
-    #except:
-     #   print "sensor error"s
-
-    #d["y_pos"] = serial_data[y]
-    #d["direc"] = serial_data[pos]
-
-
-
 
     x = position["front_dis"]
     y = position["sid_dis"]
-    yellow = position["yellow"]
-    red = position["red"]
-    safe_mine(yellow)
-    dangerous_mine(red)
 
-    #direc = position["current_dir"]
+    checklist_raw = temp_list[2:]
+    checklist = []
+    for item in checklist_raw:
+        checklist.append(int(item))
 
-    #sdirec = position["current_dir"]
+    yellow = 0
+    red = 0
+    if 1 in checklist:
+        if (checklist[0] == 1 or checklist[7] == 1) and sid_dis <= 30:
+            check = 0
+        else:
+            check = 1
+
+    check(check)
+
+    if 3 in checklist:
+        if 2 in checklist:
+            yellow = 1
+        else:
+            red = 1
+
+    safe_mine(yellow,x)
+    dangerous_mine(red,x)
+
 
 
     i+= turn(x,i)
@@ -225,16 +235,6 @@ while 1: #Do this forever
     if int(position["error_time"]) >= 4:
         error_control(position["error"])
 
-
-
-    #back(x,y,direc)
-
-    #centre_position(x,y,direc)
-    #if y_pos:
-     #   yellow.append(y_pos)
-    #if r_pos:
-     #   red.append(r_pos)
-    #centre_position(x,y,direc)
  
 
     
