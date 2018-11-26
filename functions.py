@@ -37,17 +37,7 @@ def check(check):
 
 
 def safe_mine(yellow,x):
-    # create the list for the positions of safe mines
 
-    # get the live position and direction
-    #sense.x = x
-
-
-    #detect safe mine
-
-    #safe_mine_is_detected = yellow_value_given_by_color_sensor 
-
-    #when safe mine is detected
     if yellow == '1':
         ArduinoSerial.write('7')#stop
         #record the position of the safe mine
@@ -58,12 +48,9 @@ def safe_mine(yellow,x):
         ArduinoSerial.write('5')
         back(x)
 
-        #ArduinoSerial.write('prepare_push')
-        #don't turn the direction this time
-#        return (x,y)
 
 
-def dangerous_mine(red,x):
+def dangerous_mine(red):
     if red == '1':
         ArduinoSerial.write('7')  # stop
         time.sleep(3)
@@ -224,7 +211,7 @@ while 1: #Do this forever
             red = 1
 
     safe_mine(yellow,x)
-    dangerous_mine(red,x)
+    dangerous_mine(red)
 
 
 
