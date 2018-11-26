@@ -8,7 +8,7 @@ def turn(x,i):
     x0 = 30
     dx = 30
 
-    turning_point = [30, 30, 30, 60,60,60,90,90,90]
+    turning_point = [30, 30, 30, 60,60,60,90,90,90,120]
     #create a list of turning points
 
 
@@ -40,13 +40,9 @@ def safe_mine(yellow,x):
 
     if yellow == '1':
         ArduinoSerial.write('7')#stop
-        #record the position of the safe mine
-        #safe_mine_position.append({sense.x, sense.y})
-        #stay for 3 seconds
-        time.sleep(3)
-        #tell the car to push out the mine
-        ArduinoSerial.write('5')
+        ArduinoSerial.write('8') # swiper down
         back(x)
+        ArduinoSerial.write('9')
 
 
 
@@ -93,11 +89,7 @@ def dangerous_mine(red):
     #        if round(sense.x) == 0 and round(sense.y) == 0:
      #           break
 
-#def error_adjust(x,y,direc,request_direc):
- #   if request_direc-direc>= 10:
-  #      print ("turn to one side")
-   # elif request_direc-direc <= -10:
-    #    print ("turn to the other side")_
+
 
 def error_control(error):
     if error > 0:
@@ -112,36 +104,13 @@ def error_control(error):
 
 
 def back(x):
-    x_wall =25
-    current_x =  x
+
     second = x/10
     ArduinoSerial.write('12')#code for car to go back
-    time.sleep(second)
+    time.sleesssp(second)
     ArduinoSerial.write('5')
 
-
-
-
-#def back(x,y,direc):
- #   x_wall =25
-
-    # identify the wall position
-
-  #  sense.x = x
-   # sense.y = y
-    #sense.direction = direc
-
-    #if sense.x == x_wall: #when the wall is hit, go back
-    #tell car to go back
-#    ArduinoSerial.write('back')
-    #go back to the last turning point
- #   if round(sense.x - turning_point[i][0]) == 0 and round(sense.y - turning_point[i][1]) == 0: #when the last turning point is reached
-  #  ArduinoSerial.write('straight')  # tell motor to stop turning and go back to straight movement
-
-
-#above is the function defining
-#the following is the main operating functionimport json
-ArduinoSerial = serial.Serial('COM5',9600)
+ArduinoSerial = serial.Serial('/dev/cu.usbmodem14301',9600)
 time.sleep(2) #wait for 2 secounds for the communication to get established
 #print ArduinoSerial.readline() #read the serial data and print it as line
 print ("Starting program")
@@ -219,7 +188,7 @@ while 1: #Do this forever
 
 
     #error control
-    if int(position["error_time"]) >= 4:
+    if int(position["error_time"]) >= 2:
         error_control(position["error"])
 
  
