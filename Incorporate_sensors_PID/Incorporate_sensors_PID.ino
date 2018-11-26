@@ -30,6 +30,7 @@ long heading;
 int ldr_avg = 0;
 uint8_t mine_pos[8] = {0,0,0,0,0,0,0,0};
 uint8_t mine_col[8] = {0,0,0,0,0,0,0,0};
+uint8_t ignore_ldr [8] = {0,0,0,0,0,0,0,0};
 const float ldr_calibration[8] = {0.98, 1.22, 1.0, 0.92, 0.90, 1.08, 0.96, 0.98};
 
 // Assign a unique ID to magnetometer
@@ -319,7 +320,7 @@ void setup()
   AFMS.begin(); // Initiate motor driver
 
   scoop_servo.attach(9); // Attaches scoop servo to pin 9
-  scoop_servo.write(20);
+  scoop_servo.write(0);
 
   wait_for_push();
   digitalWrite(ledR, HIGH);
@@ -366,7 +367,7 @@ void loop()
     moter1 = -105;
     moter2 = -105;
   }
-  else if (order == '13'){
+  else if (order == '3'){
     for (int i = 0; i <= 7; i++) { 
       if (mine_pos[i] == 1) {
         colour_sensing(i);
@@ -379,6 +380,23 @@ void loop()
   }
 
   mine_detection();
+  
+  /*if (u_dist1 < 35){
+    ignore_ldr[0] = 1;
+  }
+  else {
+    ignore_ldr[0] = 0;
+  }
+  
+  for (int i = 0; i <= 7; i++) { 
+    if (mine_pos[i] == 1 && ignore_ldr[i] == 0) {
+      colour_sensing(i);
+    }
+    else {
+      mine_col[i] = 0;
+    }
+  }*/
+    
   ultrasonic_sensor();
   //get_acceleration();
   //get_heading();
