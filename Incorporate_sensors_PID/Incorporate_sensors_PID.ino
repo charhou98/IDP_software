@@ -6,12 +6,12 @@
 
 #define ledY 6  // yellow LEDs 
 #define ledR 7 //red LEDs
-#define IRline 41 // infrared pin
+#define IRline 12 // infrared pin
 #define echo1 38
 #define trig1 39
 #define echo2 40
 #define trig2 41
-#define pushb 35
+#define pushb 11
 #define R_mine_indc 45
 #define Y_mine_indc 47
 #define dist1_indc 49
@@ -315,6 +315,7 @@ void setup()
   AFMS.begin(); // Initiate motor driver
 
   scoop_servo.attach(9); // Attaches scoop servo to pin 9
+  scoop_servo.write(20);
 
   wait_for_push();
   digitalWrite(ledR, HIGH);
@@ -343,6 +344,12 @@ void loop()
     moter1 = 0;
     moter2 = 0;
   }
+  else if (order == '8'){
+    scoop_servo.write(0);
+  }
+  else if (order == '9'){
+    scoop_servo.write(20);
+  }
   else if (order == '10'){
     moter1 = 110;
     moter2 = 100;
@@ -369,7 +376,6 @@ void loop()
   //get_acceleration();
   //get_heading();
   motor_shield(moter1, moter2);
-  //scoop_servo.write(servo_pos);
   print_all();
   delay(200);
    
