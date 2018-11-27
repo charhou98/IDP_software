@@ -36,21 +36,25 @@ def check(check):
 
 
 
-def safe_mine(yellow,x):
+def safe_mine(yellow,x,y):
 
     if yellow == '1':
         ArduinoSerial.write('7')#stop
         ArduinoSerial.write('8') # swiper down
         back(x)
         ArduinoSerial.write('9')
+        return (x,y)
+    return 0
 
 
 
-def dangerous_mine(red):
+def dangerous_mine(redx,x,y):
     if red == '1':
         ArduinoSerial.write('7')  # stop
         time.sleep(3)
         ArduinoSerial.write('5')
+        return (x,y)
+    return 0
     #create the list for the positions of dangerous mines
 
     # get the live position and direction   
@@ -114,8 +118,8 @@ ArduinoSerial = serial.Serial('/dev/cu.usbmodem14301',9600)
 time.sleep(2) #wait for 2 secounds for the communication to get established
 #print ArduinoSerial.readline() #read the serial data and print it as line
 print ("Starting program")
-yellow = []
-red = []
+yellowco = []
+redco = []
 i=0
 position = {"error_time": 0, "p_sid_dis": 35.0, "yellow": 0, "front_dis": 32.0, "p_error": 0.0, "red": 0, "error": 0.0, "sid_dis": 35.0,"checklist":[], "check":0}
 #ArduinoSerial.write('6')
@@ -179,8 +183,40 @@ while 1: #Do this forever
         else:
             red = 1
 
-    safe_mine(yellow,x)
-    dangerous_mine(red)
+    yellowdata = safe_mine(yellow,x,y)
+    reddata = dangerous_mine(red,x,y)
+
+    if yellowdata != 0:
+        if turn %4 = 0:
+            yellowdata[1] = 243-yellowdata[1]
+
+        elif turn % 4 = 1:
+            yellowx = yellowdata[0]
+            yellowy = yellowdata[1]
+            yellowdata = (yellowy,243-yellowx)
+        elif turn %4 = 2:
+            pass
+        elif turn % 4 = 3:
+            yellowdata = (yellowdata[1],yellowdata[0])
+
+
+        yellowco.append(yellowdata)
+
+    if reddata!= 0:
+        if turn %4 = 0:
+            reddata[1] = 243-reddata[1]
+
+        elif turn % 4 = 1:
+
+            reddata = (reddata[1],243-reddata[0])
+        elif turn %4 = 2:
+            pass
+        elif turn % 4 = 3:
+            reddata = (reddata[1],reddata[0])
+        redco.append(reddata)
+
+
+
 
 
 
