@@ -37,6 +37,7 @@ def checkit(check):
         ArduinoSerial.write('7')
         time.sleep(1)
         ArduinoSerial.write('3')
+        time.sleep(3)
         return 1
     return 0
 
@@ -45,19 +46,19 @@ def checkit(check):
 def safe_mine(yellow,x,y):
 
     if yellow == 1:
-        ArduinoSerial.write('7')#stop
-        ArduinoSerial.write('8') # swiper down
-        back(x)
-        ArduinoSerial.write('9')
+        print 'yellow detected'
+        ArduinoSerial.write('5')
+        time.sleep(3)
         return (x,y)
     return 0
 
 
 
-def dangerous_mine(redx,x,y):
+def dangerous_mine(red,x,y):
     if red == 1:
+        print 'red detected'
         ArduinoSerial.write('7')  # stop
-        time.sleep(3)
+        time.sleep(1)
         ArduinoSerial.write('5')
         return (x,y)
     return 0
@@ -117,84 +118,66 @@ def back(x):
 
     second = x/10
     ArduinoSerial.write('12')#code for car to go back
-    time.sleesssp(second)
+    time.sleep(second)
 
     ArduinoSerial.write('5')
 
 
 
 
-ArduinoSerial = serial.Serial('/dev/cu.usbmodem14301',9600)
+ArduinoSerial = serial.Serial('/dev/cu.usbmodem14401',9600)
 time.sleep(2) #wait for 2 secounds for the communication to get established
 #print ArduinoSerial.readline() #read the serial data and print it as line
 print ("Starting program")
 yellowco = []
 redco = []
 i=0
+
 position = {"error_time": 0, "p_sid_dis": 35.0, "yellow": 0, "front_dis": 32.0, "p_error": 0.0, "red": 0, "error": 0.0, "sid_dis": 35.0,"checklist":[], "check":0}
 #ArduinoSerial.write('6')
 #ime.sleep(3)
 ArduinoSerial.write('5')
 print('has started motor')
 while 1: #Do this forever
-
-
-    serial_line = ArduinoSerial.readline()
-    #serial_data.append(serial_line)  #
-    temp_list=serial_line.split(" ")
-
-#error handling
-    position["p_sid_dis"] = position["sid_dis"]
-    position["p_error"] = position["error"]
-    position["error"] = position["p_sid_dis"] - float(temp_list[0])
-
-
-    if abs(position["error"] ) >= 2 and position["error"]*position["p_error"] >= 0:
-        position["error_time"] += 1
-    else:
-        position["error_time"] = 0
-
-#how to read sensor
+    with open("positions.json") as f:
+        position = json.load(f)
 
 
 
-    front_dis = float(temp_list[1])
-    print(front_dis)
-    position["front_dis"] = front_dis
-    #except:
-     #   print "sensor error"
-    sid_dis = float(temp_list[0])
-    print(sid_dis)
-    position["sid_dis"] = sid_dis
-    print (position)
-
-
-    x = position["front_dis"]
-    y = position["sid_dis"]
-
-    checklist_raw = temp_list[2:10]
-    colorlist_raw = temp_list[10:18]
     colorlist = []
     checklist = []
-    for item in checklist_raw:
-        checklist.append(int(item))
-    for item in colorlist_raw:
-        colorlist.append(int(item))
+    x = position["front_dis"]
+    y = position["sid_dis"]
+    print (x,y)
+    colorlist = position["colorlist"]
+    checklist = position["checklist"]
+
+    print checklist
+    print colorlist
 
     yellow = 0
     red = 0
+    check = 0
     if 1 in checklist:
-        if (checklist[0] == 1 or checklist[7] == 1) and sid_dis <= 30:
+        if ((checklist[0] == 1 or checklist[7] == 1) and y >= 160) or i == 0:
             check = 0
         else:
             check = 1
 
+    print check
+
     valicheck = checkit(check)
+
     if valicheck:
-        if 2.0 in colorlist:
+        print colorlist
+        if 2 in colorlist:
             yellow = 1
-        elif 3.0 in colorlist:
+        elif 3 in colorlist:
             red = 1
+
+
+    print red
+    print yellow
 
     if yellow ==0 and red == 0:
         ArduinoSerial.write('5')
@@ -207,40 +190,44 @@ while 1: #Do this forever
     reddata = dangerous_mine(red,x,y)
 
     if yellowdata != 0:
-        if turn %4 = 0:
-            yellowdata[1] = 243-yellowdata[1]
+        print yellowdata
+        ArduinoSerial.write('5')
+        if (i %4) == 0:
+            yellowdata = (yellowdata[0],243-yellowdata[1])
 
-        elif turn % 4 = 1:
+        elif (i % 4) == 1:
             yellowx = yellowdata[0]
             yellowy = yellowdata[1]
-            yellowdata = (yellowy,243-yellowx)
-        elif turn %4 = 2:
+            yellowdata == (yellowy,243-yellowx)
+        elif (i %4) == 2:
             pass
-        elif turn % 4 = 3:
+        elif (i % 4) == 3:
             yellowdata = (yellowdata[1],yellowdata[0])
 
 
         yellowco.append(yellowdata)
+        print yellowco
 
     if reddata!= 0:
-        if turn %4 = 0:
-            reddata[1] = 243-reddata[1]
+        if (i %4) == 0:
+            reddata[1] == 243-reddata[1]
 
-        elif turn % 4 = 1:
+        elif (i % 4) == 1:
 
             reddata = (reddata[1],243-reddata[0])
-        elif turn %4 = 2:
+        elif (i %4) == 2:
             pass
-        elif turn % 4 = 3:
+        elif (i % 4) == 3:
             reddata = (reddata[1],reddata[0])
         redco.append(reddata)
+        print redco
 
 
 
 
-    if i < 10:
 
-        i+= turn(x,i)
+    i+= turn(x,i)
+    time.sleep(0.3)
 
 
 

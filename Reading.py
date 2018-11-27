@@ -3,7 +3,7 @@ import serial
 import json
 import time
 serial_data = []  # create an empty list for the data output
-ArduinoSerial = serial.Serial('COM5', 9600)  # Create Serial port object called arduinoSerialData
+ArduinoSerial = serial.Serial('/dev/cu.usbmodem14401', 9600)  # Create Serial port object called arduinoSerialData
 time.sleep(2)  # wait for 2 seconds for the communication to get established
  # read the serial data
 
@@ -34,15 +34,18 @@ while 1:
     sid_dis = float(temp_list[0])
     print(sid_dis)
     d["sid_dis"] = sid_dis
+
+    checklist_raw = temp_list[2:10]
+    colorlist_raw = temp_list[10:18]
+    colorlist = []
+    checklist = []
+    for item in checklist_raw:
+        checklist.append(int(item))
+    for item in colorlist_raw:
+        colorlist.append(int(item))
+    d["checklist"] = checklist
+    d["colorlist"] = colorlist
     print (d)
-
-    if len(temp_list) >=  3:
-        yellow = int(temp_list[2])
-        red = int(temp_list[3])
-        d["yellow"] = yellow
-        d["red"] = red
-
-
     #except:
      #   print "sensor error"s
 

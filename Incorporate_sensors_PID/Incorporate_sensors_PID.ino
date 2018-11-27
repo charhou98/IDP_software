@@ -31,7 +31,7 @@ int ldr_avg = 0;
 uint8_t mine_pos[8] = {0,0,0,0,0,0,0,0};
 uint8_t mine_col[8] = {0,0,0,0,0,0,0,0};
 uint8_t ignore_ldr [8] = {0,0,0,0,0,0,0,0};
-const float ldr_calibration[8] = {0.98, 1.22, 1.0, 0.92, 0.90, 1.08, 0.96, 0.98};
+const float ldr_calibration[8] = {1.04, 1.16, 1.0, 0.92, 0.84, 1.0, 0.96, 0.84};
 
 // Assign a unique ID to magnetometer
 Adafruit_LSM303_Mag_Unified mag = Adafruit_LSM303_Mag_Unified(12345);
@@ -320,7 +320,7 @@ void setup()
   AFMS.begin(); // Initiate motor driver
 
   scoop_servo.attach(9); // Attaches scoop servo to pin 9
-  scoop_servo.write(0);
+  scoop_servo.write(20);
 
   wait_for_push();
   digitalWrite(ledR, HIGH);
