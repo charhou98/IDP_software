@@ -8,19 +8,18 @@ def turn(x,i):
     x0 = 30
     dx = 30
 
-    turning_point = [30, 30, 30, 60,60,60,90,90,90,120]
+    turning_point = [30, 30, 30, 60,60,60,90,90,90,120,120,30,30]
     #create a list of turning points
 
 
     # get the live position and direction
 
-    if abs(x - turning_point[i]) <= 5 :#when turning point is reached
+    if abs(x - turning_point[i]) <= 5 and i <12:#when turning point is reached
 
         print(turning_point[i])
         print (x)#i is counter
         print(i)
 
-        #tell left motor to turn back
         ArduinoSerial.write('6')
         #tell right motor to turn forward
         time.sleep(3)  # wait for 3 seconds for the car to complete turning
@@ -28,6 +27,8 @@ def turn(x,i):
         ArduinoSerial.write('5')
         return 1# tell motor to stop turning and go back to straight movement
          # counter plus 1, prepare for the next turning point
+    elif i == 12:
+        ArduinoSerial.write('7')
     return 0
 
 def check(check):
@@ -112,7 +113,11 @@ def back(x):
     second = x/10
     ArduinoSerial.write('12')#code for car to go back
     time.sleesssp(second)
+
     ArduinoSerial.write('5')
+
+
+
 
 ArduinoSerial = serial.Serial('/dev/cu.usbmodem14301',9600)
 time.sleep(2) #wait for 2 secounds for the communication to get established
@@ -218,9 +223,10 @@ while 1: #Do this forever
 
 
 
+    if i < 10:
 
+        i+= turn(x,i)
 
-    i+= turn(x,i)
 
 
     #error control
