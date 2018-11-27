@@ -31,15 +31,20 @@ def turn(x,i):
         ArduinoSerial.write('7')
     return 0
 
-def check(check):
+def checkit(check):
     if check == 1:
-        ArduinoSerial.write('13')
+        print 'need to check'
+        ArduinoSerial.write('7')
+        time.sleep(1)
+        ArduinoSerial.write('3')
+        return 1
+    return 0
 
 
 
 def safe_mine(yellow,x,y):
 
-    if yellow == '1':
+    if yellow == 1:
         ArduinoSerial.write('7')#stop
         ArduinoSerial.write('8') # swiper down
         back(x)
@@ -50,7 +55,7 @@ def safe_mine(yellow,x,y):
 
 
 def dangerous_mine(redx,x,y):
-    if red == '1':
+    if red == 1:
         ArduinoSerial.write('7')  # stop
         time.sleep(3)
         ArduinoSerial.write('5')
@@ -167,10 +172,14 @@ while 1: #Do this forever
     x = position["front_dis"]
     y = position["sid_dis"]
 
-    checklist_raw = temp_list[2:]
+    checklist_raw = temp_list[2:10]
+    colorlist_raw = temp_list[10:18]
+    colorlist = []
     checklist = []
     for item in checklist_raw:
         checklist.append(int(item))
+    for item in colorlist_raw:
+        colorlist.append(int(item))
 
     yellow = 0
     red = 0
@@ -180,13 +189,19 @@ while 1: #Do this forever
         else:
             check = 1
 
-    check(check)
-
-    if 3 in checklist:
-        if 2 in checklist:
+    valicheck = checkit(check)
+    if valicheck:
+        if 2.0 in colorlist:
             yellow = 1
-        else:
+        elif 3.0 in colorlist:
             red = 1
+
+    if yellow ==0 and red == 0:
+        ArduinoSerial.write('5')
+
+
+
+    
 
     yellowdata = safe_mine(yellow,x,y)
     reddata = dangerous_mine(red,x,y)
