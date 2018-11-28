@@ -12,12 +12,14 @@ while 1:
         d = json.load(f)
     serial_line = ArduinoSerial.readline()
     serial_data.append(serial_line)  #
-    temp_list=serial_line.split(" ")
+    templist=serial_line.split(" ")
+    temp_list = [x for x in templist if x != '']
 
 #error handling
     d["p_sid_dis"] = d["sid_dis"]
     d["p_error"] = d["error"]
     d["error"] = d["p_sid_dis"] - float(temp_list[0])
+
 
 
     if abs(d["error"] ) >= 5 and d["error"]*d["p_error"] >= 0:

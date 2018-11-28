@@ -187,11 +187,11 @@ void colour_sensing(int ldr_num)
   int red_total = 0;
   int yel_total = 0;
   int ldr = ldr_pins[ldr_num];
-  for (int i = 0; i <= 7; i++) {
+  for (int i = 0; i <= 2; i++) {
     //digitalWrite(ledY, LOW);
     //digitalWrite(ledR, HIGH);
     //delay(100);
-    red_intensity = analogRead(ldr);
+    //red_intensity = analogRead(ldr);
     //Serial.print(red_intensity); Serial.print(" ");
     digitalWrite(ledR, LOW);
     digitalWrite(ledY, HIGH);
@@ -199,17 +199,17 @@ void colour_sensing(int ldr_num)
     yel_intensity = analogRead(ldr);
     //Serial.println(yel_intensity);
 
-    red_total += red_intensity * ldr_calibration[ldr_num];
+    //red_total += red_intensity * ldr_calibration[ldr_num];
     yel_total += yel_intensity * ldr_calibration[ldr_num];
   }
 
-  if (yel_total > 8*ldr_avg*1.35) {
+  if (yel_total > 3*ldr_avg*1.35) {
     //Serial.print("Yellow mine under ldr number "); Serial.println(ldr_num);
     mine_col[ldr_num] = 2;
     digitalWrite(R_mine_indc, LOW);
     digitalWrite(Y_mine_indc, HIGH);
   }
-  else if (yel_total <= 8*ldr_avg*1.35) {
+  else if (yel_total <= 3*ldr_avg*1.35) {
     //Serial.print("Red mine under ldr number "); Serial.println(ldr_num);
     mine_col[ldr_num] = 3;
     digitalWrite(Y_mine_indc, LOW);
@@ -338,8 +338,8 @@ void loop()
     order = Serial.read();
   }
   if (order == '6'){
-    moter1 = -105;
-    moter2 = 105;
+    moter1 = -102;
+    moter2 = 102;
   }
   else if (order == '5'){
     moter1 = 105;
@@ -363,7 +363,7 @@ void loop()
     moter1 = 100;
     moter2 = 110;
   }
-  else if (order == '12'){
+  else if (order == '2'){
     moter1 = -105;
     moter2 = -105;
   }

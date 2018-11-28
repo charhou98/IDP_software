@@ -4,9 +4,7 @@ import time #Required to use delay functions
 import json
 
 def turn(x,i):
-
-    x0 = 30
-    dx = 30
+    print i
 
     turning_point = [30, 30, 30, 60,60,60,90,90,90,120,120,30,30]
     #create a list of turning points
@@ -35,9 +33,11 @@ def checkit(check):
     if check == 1:
         print 'need to check'
         ArduinoSerial.write('7')
-        time.sleep(1)
+        time.sleep(0.5)
         ArduinoSerial.write('3')
-        time.sleep(3)
+        time.sleep(2)
+
+
         return 1
     return 0
 
@@ -48,7 +48,7 @@ def safe_mine(yellow,x,y):
     if yellow == 1:
         print 'yellow detected'
         ArduinoSerial.write('5')
-        time.sleep(3)
+        time.sleep(2)
         return (x,y)
     return 0
 
@@ -56,10 +56,9 @@ def safe_mine(yellow,x,y):
 
 def dangerous_mine(red,x,y):
     if red == 1:
-        print 'red detected'
-        ArduinoSerial.write('7')  # stop
-        time.sleep(1)
+        print 'red detected' # stop
         ArduinoSerial.write('5')
+        time.sleep(2)
         return (x,y)
     return 0
     #create the list for the positions of dangerous mines
@@ -132,15 +131,19 @@ print ("Starting program")
 yellowco = []
 redco = []
 i=0
-
+print i
 position = {"error_time": 0, "p_sid_dis": 35.0, "yellow": 0, "front_dis": 32.0, "p_error": 0.0, "red": 0, "error": 0.0, "sid_dis": 35.0,"checklist":[], "check":0}
 #ArduinoSerial.write('6')
 #ime.sleep(3)
 ArduinoSerial.write('5')
 print('has started motor')
 while 1: #Do this forever
-    with open("positions.json") as f:
-        position = json.load(f)
+    for k in range (5):
+        try:
+            with open("positions.json") as f:
+                position = json.load(f)
+        except:
+            pass
 
 
 
@@ -149,11 +152,9 @@ while 1: #Do this forever
     x = position["front_dis"]
     y = position["sid_dis"]
     print (x,y)
-    colorlist = position["colorlist"]
     checklist = position["checklist"]
 
     print checklist
-    print colorlist
 
     yellow = 0
     red = 0
@@ -163,12 +164,20 @@ while 1: #Do this forever
             check = 0
         else:
             check = 1
+    print i
 
     print check
 
     valicheck = checkit(check)
 
     if valicheck:
+        for j in range (5):
+            try:
+                with open("positions.json") as f:
+                    positioncolor = json.load(f)
+            except:
+                pass
+        colorlist = positioncolor["colorlist"]
         print colorlist
         if 2 in colorlist:
             yellow = 1
@@ -184,6 +193,7 @@ while 1: #Do this forever
 
 
 
+
     
 
     yellowdata = safe_mine(yellow,x,y)
@@ -191,7 +201,7 @@ while 1: #Do this forever
 
     if yellowdata != 0:
         print yellowdata
-        ArduinoSerial.write('5')
+
         if (i %4) == 0:
             yellowdata = (yellowdata[0],243-yellowdata[1])
 
@@ -227,7 +237,8 @@ while 1: #Do this forever
 
 
     i+= turn(x,i)
-    time.sleep(0.3)
+
+    time.sleep(0.1)
 
 
 
