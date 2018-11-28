@@ -160,7 +160,7 @@ while 1: #Do this forever
     red = 0
     check = 0
     if 1 in checklist:
-        if ((checklist[0] == 1 or checklist[7] == 1) and y >= 160) or i == 0:
+        if ((checklist[0] == 1 or checklist[7] == 1) and y >= 170) or i == 0:
             check = 0
         else:
             check = 1

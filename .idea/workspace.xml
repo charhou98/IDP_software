@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35c8e5d5-b609-498e-834b-28c73c50f806" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/emergency.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Incorporate_sensors_PID/Incorporate_sensors_PID.ino" beforeDir="false" afterPath="$PROJECT_DIR$/Incorporate_sensors_PID/Incorporate_sensors_PID.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Reading.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reading.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/positions.json" beforeDir="false" afterPath="$PROJECT_DIR$/positions.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -50,7 +45,7 @@
           <entry key="Python Console" value="52" />
           <entry key="json" value="1" />
           <entry key="positions" value="32" />
-          <entry key="py" value="3279" />
+          <entry key="py" value="3280" />
           <entry key="txt" value="19" />
         </counts>
       </usages-collector>
@@ -58,7 +53,7 @@
         <counts>
           <entry key="JSON" value="33" />
           <entry key="PLAIN_TEXT" value="19" />
-          <entry key="Python" value="3331" />
+          <entry key="Python" value="3332" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -69,8 +64,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2100">
-              <caret line="140" column="9" selection-start-line="140" selection-start-column="9" selection-end-line="140" selection-end-column="9" />
+            <state relative-caret-position="316">
+              <caret line="162" column="64" selection-start-line="162" selection-start-column="64" selection-end-line="162" selection-end-column="64" />
               <folding>
                 <element signature="e#0#55#0" expanded="true" />
               </folding>
@@ -176,7 +171,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds">
     <option name="x" value="7" />
     <option name="y" value="26" />
     <option name="width" value="1411" />
@@ -380,8 +375,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2100">
-          <caret line="140" column="9" selection-start-line="140" selection-start-column="9" selection-end-line="140" selection-end-column="9" />
+        <state relative-caret-position="316">
+          <caret line="162" column="64" selection-start-line="162" selection-start-column="64" selection-end-line="162" selection-end-column="64" />
           <folding>
             <element signature="e#0#55#0" expanded="true" />
           </folding>
